@@ -1,0 +1,82 @@
+/* Sidebar Styles
+   Contains styles for the sidebar and its components
+*/
+
+/* Sidebar wrapper */
+#sidebar-wrapper {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #343a40;
+    transition: all 0.3s;
+}
+
+#sidebar-wrapper.expanded {
+    width: 250px;
+}
+
+/* User info section */
+.user-info {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-info img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.user-name {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Sidebar categories */
+.sidebar-category {
+    padding: 15px 0;
+}
+
+.sidebar-subheading {
+    color: #6c757d;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Menu items */
+.list-group-item {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.list-group-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Sidebar text */
+.sidebar-text {
+    margin-left: 10px;
+    opacity: 0.8;
+}
+
+/* Active state */
+.list-group-item.active {
+    background-color: #007bff;
+    color: #fff;
+} 
