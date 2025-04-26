@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ManagedUserController;
 use App\Http\Controllers\MealConsumptionController;
 use App\Http\Controllers\studentSettings;
+use App\Http\Controllers\SupplierManagementController;
+use App\Http\Controllers\StudentHomeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,9 +13,10 @@ Route::get('/', function () {
 
 Route::get('/admin/notifications', [NotificationController::class, 'showNotification'])->name('AdminNotif');
 
-Route::get('/admin/usermanagement', [ManagedUserController::class, 'view'])->name('admin.adminUserM','users');
+//Admin Supplier Management
 
-Route::resource('users', ManagedUserController::class);
+Route::get('/admin/supplier', [SupplierManagementController::class, 'showSupplier'])->name('AdminSupplierManagement');
+
 
 //Student Meal Consumption
 
@@ -29,3 +31,7 @@ Route::get('/student/student-meals/filter', [MealConsumptionController::class, '
 
 Route::get('/student/settings', [studentSettings::class, 'viewSettings'])->name('student.studentSettings');
 Route::post('/student/settings/update', [studentSettings::class, 'updateSettings'])->name('student.settings.update');
+
+//Student Home
+
+Route::get('student/home', [StudentHomeController::class, 'viewStudentHome'])->name('student.studentHome');
