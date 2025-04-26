@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class studentSetting extends Model
+class StudentSetting extends Model
 {
     protected $fillable = ['user_id', 'setting_name', 'setting_value'];
 
@@ -20,9 +20,9 @@ class studentSetting extends Model
                 ->orWhere('setting_value', 'like', '%' . request('search') . '%');
         }
     }
+    
     public function scopeFilterByDate($query, $date)
     {
         return $query->whereDate('created_at', $date);
     }
-    
-}
+} 

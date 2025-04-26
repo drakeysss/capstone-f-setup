@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\StudentSetting;
 
-class studentSettings extends Controller
+class StudentSettingsController extends Controller
 {
     public function viewSettings()
     {
@@ -14,7 +14,6 @@ class studentSettings extends Controller
 
     public function updateSettings(Request $request)
     {
-
         return redirect()->back()->with('success', 'Settings updated successfully.');
     }
 
@@ -27,5 +26,4 @@ class studentSettings extends Controller
 
         return redirect()->back()->with('success', 'Settings saved successfully.');
     }
-}
-    
+} 
