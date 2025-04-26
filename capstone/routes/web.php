@@ -6,12 +6,23 @@ use App\Http\Controllers\MealConsumptionController;
 use App\Http\Controllers\studentSettings;
 use App\Http\Controllers\SupplierManagementController;
 use App\Http\Controllers\StudentHomeController;
+use App\Http\Controllers\studentSettingsController;
+use App\Http\Controllers\studentMenuController; 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin/notifications', [NotificationController::class, 'showNotification'])->name('AdminNotif');
+// Admin Routes
+Route::prefix('admin')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'showNotification'])
+        ->name('admin.notifications');
+    
+    Route::get('/user-management', [ManagedUserController::class, 'view'])
+        ->name('admin.user-management');
+    
+    Route::resource('users', ManagedUserController::class);
+});
 
 //Admin Supplier Management
 
@@ -35,3 +46,28 @@ Route::post('/student/settings/update', [studentSettings::class, 'updateSettings
 //Student Home
 
 Route::get('student/home', [StudentHomeController::class, 'viewStudentHome'])->name('student.studentHome');
+// Student Routes
+Route::prefix('student')->group(function () {
+    // Meal Consumption Routes
+    Route::get('/meal-consumption', [MealConsumptionController::class, 'viewConsumption'])
+        ->name('student.meal-consumption');
+    
+    Route::get('/meals', [MealConsumptionController::class, 'viewConsumption'])
+        ->name('student.meals');
+    
+    Route::get('/meals/filter', [MealConsumptionController::class, 'mealConsumptionMethods'])
+        ->name('student.meals.filter');
+    
+    // Settings Routes
+    Route::get('/settings', [studentSettingsController::class, 'viewSettings'])
+        ->name('student.settings');
+    
+    Route::post('/settings/update', [studentSettingsController::class, 'updateSettings'])
+        ->name('student.settings.update');
+
+    //Student Menu Routes
+    Route::get('/menu', [studentMenuController::class, 'index'])
+        ->name('student.studentDailyMenu');
+    Route::get('/menu/show', [studentMenuController::class, 'show'])
+        ->name('student.studentDailyMenu.show');
+});
