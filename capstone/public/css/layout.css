@@ -1,0 +1,111 @@
+/* Layout Styles
+   Contains styles for the main layout structure, wrapper, and containers
+*/
+
+/* Main wrapper */
+#wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.navbar{
+    width: 100%;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Page content wrapper */
+#page-content-wrapper {
+    width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+/* Container styles */
+.container {
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Card styles */
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin: 0;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px 15px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Table container */
+.table-responsive {
+    margin: 0;
+    padding: 0;
+}
+
+/* Button container */
+.d-flex.align-items-center.justify-content-end {
+    gap: 12px;
+} 
+
+
+/* Student Meal Consumption */
+
+/* Dropdown Styling */
+.form-select {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #495057;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-select, .form-control {
+    padding: 6px 10px; 
+    margin: 0; 
+    box-shadow: none; 
+    height: auto;
+    font-size: 0.9rem;
+}
+
+.form-select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-select option {
+    background-color: #fff;
+    color: #495057;
+}
+
+
+.form-select:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+
+
+.d-flex > .form-select, 
+.d-flex > .form-control {
+    margin-right: 8px; 
+}
+
+.card-header .d-flex {
+    gap: 10px; 
+    align-items: center; 
+    justify-content: space-between;
+}
