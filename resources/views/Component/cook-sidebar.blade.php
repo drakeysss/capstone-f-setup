@@ -86,7 +86,7 @@
     }
 
     hr {
-        border-top: 1px solid rgb(12, 12, 12);
+        border-top: 1px solidrgb(12, 12, 12);
         margin: 0.5rem 0;
     }
 </style>
@@ -94,7 +94,7 @@
 <nav class="sidebar">
     <!-- Sidebar Header -->
     <div class="sidebar-header">
-        <i class="bi bi-person-circle icon" style = "color: #ff9900"></i>
+        <i class="bi bi-person-circle icon" style="color: #ff9933;"></i>
         <h6 class="sidebar-title">Cook Dashboard</h6>
     </div>
 
@@ -113,6 +113,12 @@
         <div class="sidebar-category">MANAGEMENT</div>
         <ul class="sidebar-nav">
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cook.orders') ? 'active' : '' }}" href="{{ route('cook.orders') }}">
+                    <i class="bi bi-cart icon"></i>
+                    <span class="small">Orders</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('cook.menu') ? 'active' : '' }}" href="{{ route('cook.menu') }}">
                     <i class="bi bi-journal-text icon"></i>
                     <span class="small">Menu Management</span>
@@ -125,7 +131,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.suppliers') ? 'active' : '' }}" href="{{ route('cook.suppliers') }}">
+                <a class="nav-link {{ request()->routeIs('cook.suppliers.index') ? 'active' : '' }}" href="{{ route('cook.suppliers.index') }}">
                     <i class="bi bi-truck icon"></i>
                     <span class="small">Suppliers</span>
                 </a>

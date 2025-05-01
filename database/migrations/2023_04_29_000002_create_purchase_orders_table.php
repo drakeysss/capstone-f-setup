@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'preparing', 'ready', 'completed', 'cancelled'])->default('pending');
+            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
+            $table->json('items');
             $table->decimal('total_amount', 10, 2);
-            $table->text('notes')->nullable();
+            $table->enum('status', ['pending', 'approved', 'delivered'])->default('pending');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('purchase_orders');
     }
-}; 
+};

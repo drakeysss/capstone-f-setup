@@ -2,6 +2,7 @@
 <nav class="sidebar">
     <!-- Sidebar Header -->
     <div class="sidebar-header">
+        <i class="bi bi-person-circle icon" style="color: #22bbea;"></i>
         <h6 class="sidebar-title">Admin Portal</h6>
     </div>
 
@@ -99,7 +100,7 @@
     .sidebar-title {
         margin: 0;
         font-weight: 600;
-        color: #4f46e5;
+        color: #ff9933;
     }
 
     .sidebar-body {

@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'preparing', 'ready', 'completed', 'cancelled'])->default('pending');
-            $table->decimal('total_amount', 10, 2);
-            $table->text('notes')->nullable();
+            $table->enum('meal_type', ['breakfast', 'lunch', 'dinner']);
+            $table->dateTime('report_date');
+            $table->json('meal_items');
+            $table->text('feedback');
+            $table->integer('rating');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('reports');
     }
 }; 

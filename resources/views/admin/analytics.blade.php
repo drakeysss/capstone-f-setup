@@ -126,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(document.getElementById('popularItemsChart'), {
         type: 'bar',
         data: {
-            labels: {!! json_encode($popularItems->pluck('name')) !!},
+            labels: {!! json_encode($popularMenuItems->pluck('name')) !!},
             datasets: [{
                 label: 'Orders',
-                data: {!! json_encode($popularItems->pluck('order_count')) !!},
+                data: {!! json_encode($popularMenuItems->pluck('order_count')) !!},
                 backgroundColor: '#3498db'
             }]
         },

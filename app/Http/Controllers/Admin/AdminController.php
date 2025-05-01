@@ -23,7 +23,7 @@ class AdminController extends Controller
         $totalUsers = User::count();
         $totalOrders = Order::count();
         $totalMenuItems = Menu::count();
-        $totalRevenue = Order::where('status', 'completed')->sum('total');
+        $totalRevenue = Order::where('status', 'completed')->sum('total_amount');
         $recentOrders = Order::with('student')
             ->latest()
             ->take(10)
@@ -69,12 +69,25 @@ class AdminController extends Controller
     public function analytics()
     {
         // Get monthly revenue for the last 6 months
+        $startDate = Carbon::now()->subMonths(6)->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
+        
+        // Initialize array with all months
+        $allMonths = collect();
+        for ($date = $startDate; $date <= $endDate; $date->addMonth()) {
+            $allMonths->push([
+                'month' => $date->format('M'),
+                'revenue' => 0
+            ]);
+        }
+
+        // Get actual revenue data
         $monthlyRevenue = Order::where('status', 'completed')
-            ->where('created_at', '>=', Carbon::now()->subMonths(6))
+            ->where('created_at', '>=', $startDate)
             ->select(
                 DB::raw('MONTH(created_at) as month'),
                 DB::raw('YEAR(created_at) as year'),
-                DB::raw('SUM(total) as revenue')
+                DB::raw('SUM(total_amount) as revenue')
             )
             ->groupBy('year', 'month')
             ->orderBy('year')
@@ -87,17 +100,23 @@ class AdminController extends Controller
                 ];
             });
 
+        // Merge actual data with all months
+        $monthlyRevenue = $allMonths->map(function ($month) use ($monthlyRevenue) {
+            $actualData = $monthlyRevenue->firstWhere('month', $month['month']);
+            return $actualData ?: $month;
+        });
+
         // Get order statistics
         $orderStats = Order::select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get();
 
         // Get popular menu items
-        $popularItems = Order::join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->join('menu_items', 'order_items.menu_item_id', '=', 'menu_items.id')
-            ->select('menu_items.name', DB::raw('COUNT(*) as order_count'))
-            ->groupBy('menu_items.id', 'menu_items.name')
-            ->orderByDesc('order_count')
+        $popularMenuItems = Order::select('menus.name', DB::raw('COUNT(*) as order_count'))
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->join('menus', 'order_items.menu_id', '=', 'menus.id')
+            ->groupBy('menus.id', 'menus.name')
+            ->orderBy('order_count', 'desc')
             ->limit(5)
             ->get();
 
@@ -105,7 +124,7 @@ class AdminController extends Controller
         $userActivity = Order::where('created_at', '>=', Carbon::now()->subDays(7))
             ->select(
                 DB::raw('DATE(created_at) as date'),
-                DB::raw('COUNT(DISTINCT user_id) as active_users')
+                DB::raw('COUNT(DISTINCT student_id) as active_users')
             )
             ->groupBy('date')
             ->orderBy('date')
@@ -120,7 +139,7 @@ class AdminController extends Controller
         return view('admin.analytics', compact(
             'monthlyRevenue',
             'orderStats',
-            'popularItems',
+            'popularMenuItems',
             'userActivity'
         ));
     }

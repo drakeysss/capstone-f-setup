@@ -8,6 +8,10 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Cook\CookDashboardController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Cook\SupplierController;
+use App\Http\Controllers\Cook\InventoryController;
+use App\Http\Controllers\Cook\MenuController;
+use App\Http\Controllers\Cook\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,14 +37,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     
-    
     // System Management
     Route::get('/suppliers', [AdminDashboardController::class, 'suppliers'])->name('suppliers');
     Route::get('/notifications', [AdminDashboardController::class, 'notifications'])->name('notifications');
     Route::post('/settings', [AdminDashboardController::class, 'updateSettings'])->name('settings.update');
-    
+        
     // Analytics
-    Route::get('/analytics', [AdminDashboardController::class, 'analytics'])->name('analytics');
+    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
 });
 
 // Student Routes
@@ -52,6 +55,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/settings', [StudentDashboardController::class, 'settings'])->name('settings');
     Route::get('/history', [StudentDashboardController::class, 'history'])->name('history');
     Route::get('/reports', [StudentDashboardController::class, 'reports'])->name('reports');
+    Route::post('/reports', [StudentDashboardController::class, 'storeReport'])->name('reports.store');
 });
 
 // Cook Routes
@@ -61,10 +65,16 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::get('/inventory', [CookDashboardController::class, 'inventory'])->name('inventory');
     Route::get('/profile', [CookDashboardController::class, 'profile'])->name('profile');
     Route::get('/settings', [CookDashboardController::class, 'settings'])->name('settings');
-    Route::get('/suppliers', [CookDashboardController::class, 'suppliers'])->name('suppliers');
     Route::get('/reports', [CookDashboardController::class, 'reports'])->name('reports');
     Route::get('/notifications', [CookDashboardController::class, 'notifications'])->name('notifications');
     Route::get('/orders', [CookDashboardController::class, 'orders'])->name('orders');
     Route::get('/menu', [CookDashboardController::class, 'menu'])->name('menu');
     Route::get('/schedule', [CookDashboardController::class, 'schedule'])->name('schedule');
+
+    // Supplier Management Routes
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+    Route::post('/suppliers/purchase-order', [SupplierController::class, 'createPurchaseOrder'])->name('suppliers.purchase-order');
 });

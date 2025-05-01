@@ -14,6 +14,13 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <!-- Custom CSS -->
     <style>
         :root {
@@ -40,7 +47,7 @@
             top: 0;
             left: 0;
             z-index: 1030;
-            background-color: #ffffff; /* Changed to white */
+            background-color: #ffffff;
             box-shadow: var(--card-shadow);
         }
 
@@ -50,7 +57,7 @@
         }
 
         .sidebar .nav-link {
-            color: rgba(0, 0, 0, 0.7); /* Dark text for better visibility */
+            color: rgba(0, 0, 0, 0.7);
             transition: all 0.2s;
             border-radius: 0.35rem;
             margin: 0.2rem 0;
@@ -58,13 +65,13 @@
 
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            color: #fff; /* Text color when hovered */
-            background-color: #ffa500; /* Orange hover effect */
+            color: #fff;
+            background-color: #ffa500;
         }
 
         .sidebar .nav-link:active {
-            background-color: #ffa500; /* Orange color when active */
-            color: white; /* Text color when active */
+            background-color: #ffa500;
+            color: white;
         }
 
         .main-content {
@@ -90,30 +97,6 @@
         .navbar-brand {
             font-weight: 600;
             color: var(--primary-color);
-        }
-
-        .dropdown-menu {
-            border: 1px solid #e5e7eb;
-            box-shadow: var(--card-shadow);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-        }
-
-        .dropdown-item {
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            color: var(--secondary-color);
-            transition: all 0.2s ease-in-out;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f3f4f6;
-            color: var(--primary-color);
-        }
-
-        .dropdown-item:active {
-            background-color: var(--primary-color);
-            color: white;
         }
 
         /* Mobile Styles */
@@ -167,8 +150,8 @@
         }
 
         .btn-primary:hover {
-            background-color: #e68900; /* Slightly darker orange on hover */
-            border-color: #e68900; /* Darker border on hover */
+            background-color: #e68900;
+            border-color: #e68900;
         }
     </style>
 
@@ -195,6 +178,11 @@
                         {{ session('error') }}
                     </div>
                 @endif
+                @if(session('success'))
+                    <div class="alert alert-success mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 @yield('content')
             </div>
         @endif
@@ -207,7 +195,17 @@
     @endauth
 
     <!-- Bootstrap Bundle with Popper -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom Scripts -->
     <script>
