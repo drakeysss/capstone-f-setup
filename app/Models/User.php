@@ -53,6 +53,7 @@ class User extends Authenticatable
             'admin' => 'admin.dashboard',
             'student' => 'student.dashboard',
             'cook' => 'cook.dashboard',
+            'kitchen' => 'kitchen.dashboard',
             default => 'login',
         };
     }

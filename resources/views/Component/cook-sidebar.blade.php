@@ -1,97 +1,39 @@
+<!-- Cook Sidebar Styles -->
 <style>
-    .sidebar {
-        background-color: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        border-right: 1px solid #dee2e6;
-        height: 100vh;
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
+.cook-portal {
+    background-color: #fff;
+}
 
-    .sidebar-header {
-        display: flex;
-        align-items: center;
-        padding: 2rem;
-        border-bottom: 1px solid #dee2e6;
-    }
+.cook-portal .sidebar-header {
+    background-color: #f0fff4;
+}
 
-    .sidebar-title {
-        margin: 0;
-        font-weight: 600;
-        color: #22bbea;
-    }
+.cook-portal .sidebar-title {
+    color: #ff9933;
+}
 
-    .sidebar-body {
-        padding: 1rem;
-    }
+.cook-portal .nav-link:hover {
+    color: #fff;
+    background-color: var(--primary-color);
+    transform: translateX(3px);
+}
 
-    .sidebar-category {
-        font-size: 0.7rem;
-        color: #6c757d;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-    }
+.cook-portal .nav-link.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
 
-    .sidebar-nav {
-        list-style: none;
-        padding-left: 0;
-        margin-bottom: 1rem;
-    }
+.cook-portal .nav-link.active:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
 
-    .nav-item {
-        margin-bottom: 0.3rem;
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        color: #6b7280;
-        text-decoration: none;
-        border-radius: 0.35rem;
-        transition: 0.2s;
-    }
-
-    .nav-link:hover {
-        background-color: rgba(78, 115, 223, 0.1);
-        color: #4f46e5;
-    }
-
-    .nav-link.active {
-        background-color: rgba(78, 115, 223, 0.1);
-        font-weight: bold;
-        color: #ffa500;
-    }
-
-    .icon {
-        margin-right: 0.5rem;
-        font-size: 1rem;
-    }
-
-    .logout-btn {
-        color: #dc3545;
-        background: transparent;
-        border: none;
-        width: 100%;
-        text-align: left;
-        padding: 0.5rem;
-        border-radius: 0.35rem;
-    }
-
-    .logout-btn:hover {
-        background-color: rgba(220, 53, 69, 0.1);
-    }
-
-    hr {
-        border-top: 1px solidrgb(12, 12, 12);
-        margin: 0.5rem 0;
-    }
+.cook-portal .sidebar-category {
+    color: #ff9933;
+}
 </style>
 
-<nav class="sidebar">
+<nav class="sidebar cook-portal">
     <!-- Sidebar Header -->
     <div class="sidebar-header">
         <i class="bi bi-person-circle icon" style="color: #ff9933;"></i>
@@ -112,12 +54,6 @@
 
         <div class="sidebar-category">MANAGEMENT</div>
         <ul class="sidebar-nav">
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.orders') ? 'active' : '' }}" href="{{ route('cook.orders') }}">
-                    <i class="bi bi-cart icon"></i>
-                    <span class="small">Orders</span>
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('cook.menu') ? 'active' : '' }}" href="{{ route('cook.menu') }}">
                     <i class="bi bi-journal-text icon"></i>
@@ -153,7 +89,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('cook.settings') ? 'active' : '' }}" href="{{ route('cook.settings') }}">
                     <i class="bi bi-gear icon"></i>
-                    <span class = "small">Settings</span>
+                    <span class="small">Settings</span>
                 </a>
             </li>
             <hr>

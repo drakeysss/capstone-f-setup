@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Cook;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Menu;
 use App\Models\Inventory;
 use App\Models\Supplier;
 
-class CookDashboardController extends Controller
+class CookDashboardController extends BaseDashboardController
 {
-    public function index()
+    public function __construct()
+    {
+        parent::__construct('cook', 'cook');
+    }
+
+    protected function getDashboardData()
     {
         // Get order statistics
         $pendingOrders = Order::whereIn('status', ['pending', 'preparing'])->count();
@@ -45,7 +50,7 @@ class CookDashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('cook.dashboard', compact(
+        return compact(
             'pendingOrders',
             'completedOrders',
             'activeMenuItems',
@@ -57,7 +62,7 @@ class CookDashboardController extends Controller
             'activeSuppliers',
             'recentSuppliers',
             'recentOrders'
-        ));
+        );
     }
 
     public function consumption()
@@ -85,14 +90,14 @@ class CookDashboardController extends Controller
         return view('cook.profile');
     }
 
-    public function settings()
-    {
-        return view('cook.settings');
-    }
-
     public function suppliers()
     {
         return view('cook.suppliers');
+    }
+
+    public function settings()
+    {
+        return view('cook.settings');
     }
 
     public function reports()

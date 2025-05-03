@@ -28,6 +28,8 @@ class RedirectIfAuthenticated
                     return redirect()->route('student.dashboard');
                 } elseif ($user->hasRole('cook')) {
                     return redirect()->route('cook.dashboard');
+                } elseif ($user->hasRole('kitchen')) {
+                    return redirect()->route('kitchen.dashboard');
                 }
             }
         }

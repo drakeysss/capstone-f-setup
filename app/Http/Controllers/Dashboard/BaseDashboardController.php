@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Dashboard\BaseDashboardController;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Order;
@@ -10,66 +9,48 @@ use App\Models\Menu;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
-class AdminController extends BaseDashboardController
+abstract class BaseDashboardController extends Controller
 {
-    public function __construct()
+    protected $role;
+    protected $viewPath;
+
+    public function __construct($role, $viewPath)
     {
-        parent::__construct('admin', 'admin');
         $this->middleware('auth');
-        $this->middleware('role:admin');
+        $this->middleware("role:$role");
+        $this->role = $role;
+        $this->viewPath = $viewPath;
     }
 
     public function dashboard()
     {
-        $totalUsers = User::count();
-        $totalOrders = Order::count();
-        $totalMenuItems = Menu::count();
-        $totalRevenue = Order::where('status', 'completed')->sum('total_amount');
-        $recentOrders = Order::with('student')
-            ->latest()
-            ->take(10)
-            ->get();
-
-        return view('admin.dashboard', compact(
-            'totalUsers',
-            'totalOrders',
-            'totalMenuItems',
-            'totalRevenue',
-            'recentOrders'
-        ));
+        $data = $this->getDashboardData();
+        return view("$this->viewPath.dashboard", $data);
     }
 
-    public function users()
+    protected function getDashboardData()
     {
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
-    }
-
-    public function menus()
-    {
-        $menus = Menu::all();
-        return view('admin.menus.index', compact('menus'));
-    }
-
-    public function orders()
-    {
-        $orders = Order::with('student')->latest()->get();
-        return view('admin.orders.index', compact('orders'));
+        return [
+            'totalUsers' => User::count(),
+            'totalOrders' => Order::count(),
+            'totalMenuItems' => Menu::count(),
+            'totalRevenue' => Order::where('status', 'completed')->sum('total_amount'),
+            'recentOrders' => Order::with('student')->latest()->take(10)->get()
+        ];
     }
 
     public function reports()
     {
-        return view('admin.reports');
+        return view("$this->viewPath.reports");
     }
 
-    public function settings()
+    public function notifications()
     {
-        return view('admin.settings');
+        return view("$this->viewPath.notifications");
     }
 
-    public function analytics()
+    protected function getAnalyticsData()
     {
         // Get monthly revenue for the last 6 months
         $startDate = Carbon::now()->subMonths(6)->startOfMonth();
@@ -77,7 +58,7 @@ class AdminController extends BaseDashboardController
         
         // Initialize array with all months
         $allMonths = collect();
-        for ($date = $startDate; $date <= $endDate; $date->addMonth()) {
+        for ($date = $startDate->copy(); $date <= $endDate; $date->addMonth()) {
             $allMonths->push([
                 'month' => $date->format('M'),
                 'revenue' => 0
@@ -139,27 +120,11 @@ class AdminController extends BaseDashboardController
                 ];
             });
 
-        return view('admin.analytics', compact(
-            'monthlyRevenue',
-            'orderStats',
-            'popularMenuItems',
-            'userActivity'
-        ));
-    }
-
-    public function notifications()
-    {
-        return view('admin.notifications');
-    }
-
-    public function suppliers()
-    {
-        return view('admin.suppliers');
-    }
-
-    public function updateSettings(Request $request)
-    {
-        // Add your settings update logic here
-        return redirect()->route('admin.settings')->with('success', 'Settings updated successfully.');
+        return [
+            'monthlyRevenue' => $monthlyRevenue,
+            'orderStats' => $orderStats,
+            'popularMenuItems' => $popularMenuItems,
+            'userActivity' => $userActivity
+        ];
     }
 }

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Settings\BaseSettingsController;
 use Illuminate\Http\Request;
 
-class StudentSettingsController extends Controller
+class StudentSettingsController extends BaseSettingsController
 {
     public function __construct()
     {
-        $this->middleware('role:student');
+        parent::__construct('student', 'student');
     }
 
     public function index()
@@ -30,7 +30,8 @@ class StudentSettingsController extends Controller
 
     public function updatePreferences(Request $request)
     {
-        // Update preferences logic
-        return redirect()->back()->with('success', 'Preferences updated successfully');
+        // Student-specific preference updates
+        // Add any additional student-specific logic here
+        return parent::updatePreferences($request);
     }
-} 
+}

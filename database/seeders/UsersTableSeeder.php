@@ -45,6 +45,36 @@ class UsersTableSeeder extends Seeder
             }
         }
 
+        // Create kitchen team users if not exist
+        $kitchenStaff = [
+            [
+                'name' => 'Maria Santos',
+                'email' => 'kitchen1@example.com',
+                'password' => 'password123'
+            ],
+            [
+                'name' => 'Juan Cruz',
+                'email' => 'kitchen2@example.com',
+                'password' => 'password123'
+            ],
+            [
+                'name' => 'Ana Reyes',
+                'email' => 'kitchen3@example.com',
+                'password' => 'password123'
+            ]
+        ];
+
+        foreach ($kitchenStaff as $staff) {
+            if (!User::where('email', $staff['email'])->exists()) {
+                User::create([
+                    'name' => $staff['name'],
+                    'email' => $staff['email'],
+                    'password' => Hash::make($staff['password']),
+                    'role' => 'kitchen',
+                ]);
+            }
+        }
+
         // Create student users if not exist
         $students = [
             [

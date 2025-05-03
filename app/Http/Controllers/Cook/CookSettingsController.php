@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Cook;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Settings\BaseSettingsController;
 
-class CookSettingsController extends Controller
+class CookSettingsController extends BaseSettingsController
 {
     public function __construct()
     {
-        $this->middleware('role:cook');
+        parent::__construct('cook', 'cook');
     }
 
     public function index()

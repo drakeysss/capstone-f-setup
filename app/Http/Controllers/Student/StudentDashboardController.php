@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
 
-class StudentDashboardController extends Controller
+class StudentDashboardController extends BaseDashboardController
 {
-    public function index()
+    public function __construct()
     {
-        return view('student.dashboard');
+        parent::__construct('student', 'student');
+    }
+
+    protected function getDashboardData()
+    {
+        $reports = Report::where('student_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return [
+            'reports' => $reports,
+            'recentOrders' => parent::getDashboardData()['recentOrders']
+        ];
     }
 
     public function menu()

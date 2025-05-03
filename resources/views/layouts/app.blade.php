@@ -8,11 +8,13 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -26,8 +28,8 @@
         :root {
             --sidebar-width: 250px;
             --navbar-height: 60px;
-            --primary-color: #ffa500;
-            --secondary-color: rgb(113, 107, 128);
+            --primary-color: #22bbea;
+            --secondary-color: #ff9933;
             --success-color: #10b981;
             --bg-color: rgb(250, 249, 251);
             --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -57,23 +59,71 @@
         }
 
         .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
             color: rgba(0, 0, 0, 0.7);
             transition: all 0.2s;
-            border-radius: 0.35rem;
-            margin: 0.2rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link .icon {
+            font-size: 1.1rem;
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            text-align: center;
         }
 
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
             color: #fff;
-            background-color: #ffa500;
+            transform: translateX(3px);
         }
 
-        .sidebar .nav-link:active {
-            background-color: #ffa500;
-            color: white;
+        .sidebar hr {
+            margin: 1rem 0;
+            opacity: 0.15;
         }
 
+        .logout-btn {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #dc3545;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                padding: 0.75rem;
+            }
+
+            .sidebar-header {
+                padding: 1rem;
+            }
+
+            .sidebar .nav-link {
+                padding: 0.6rem 0.75rem;
+            }
+
+            .sidebar-category {
+                margin: 1.25rem 0 0.5rem 0.5rem;
+            }
+        }
+
+        /* Main Content */
         .main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
@@ -97,21 +147,6 @@
         .navbar-brand {
             font-weight: 600;
             color: var(--primary-color);
-        }
-
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-            }
-
-            .offcanvas {
-                width: 280px;
-            }
         }
 
         /* Card Styles */
@@ -167,6 +202,8 @@
                 @include('Component.student-sidebar')
             @elseif(Auth::user()->role == 'cook')
                 @include('Component.cook-sidebar')
+            @elseif(Auth::user()->role == 'kitchen')
+                @include('Component.kitchen-sidebar')
             @else
                 @include('Component.admin-sidebar')
             @endif
