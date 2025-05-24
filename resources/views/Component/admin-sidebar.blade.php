@@ -24,14 +24,14 @@
 
     .admin-portal .sidebar-header .icon {
         font-size: 1.5rem;
-        margin-right: 0.75rem;
+        margin: 1rem;
         color: #22bbea;
     }
 
     .admin-portal .sidebar-title {
-        margin: 0;
+        margin: 0.5rem;
         font-weight: 600;
-        color: #333;
+        color: #22bbea;
         font-size: 1.1rem;
     }
 
@@ -134,7 +134,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}" href="{{ route('admin.reports') }}">
                     <i class="bi bi-graph-up icon"></i>
-                    <span class="small">Reports</span>
+                    <span class="small">Reports and History</span>
                 </a>
             </li>
         </ul>
