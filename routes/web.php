@@ -56,16 +56,22 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
 
     // Order Management
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-    Route::post('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::get('/orders/pending', [OrderController::class, 'pendingOrders'])->name('orders.pending');
+    Route::get('/orders/completed', [OrderController::class, 'completedOrders'])->name('orders.completed');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::post('/orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
     // Menu Management
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+    Route::get('/menu/active', [OrderController::class, 'activeMenuItems'])->name('menu.active');
     Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
     Route::put('/menu/{menu}', [MenuController::class, 'update'])->name('menu.update');
     Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->name('menu.delete');
 
     // Inventory Management
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
+    Route::get('/inventory/low-stock', [OrderController::class, 'lowStockItems'])->name('inventory.low-stock');
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
     Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.delete');
@@ -75,7 +81,28 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
-    Route::post('/suppliers/purchase-order', [SupplierController::class, 'createPurchaseOrder'])->name('suppliers.purchase-order');
+    Route::post('/suppliers/purchase-order', [SupplierController::class, 'purchaseOrder'])->name('suppliers.purchase-order');
+    Route::get('/suppliers/purchase-orders', [SupplierController::class, 'getPurchaseOrders'])->name('suppliers.purchase-orders');
+    Route::get('/purchase-order', [SupplierController::class, 'purchaseOrderPage'])->name('purchase-order.page');
+    Route::post('/purchase-order/save', [SupplierController::class, 'purchaseOrder'])->name('purchase-order.save');
+    Route::get('/purchase-order/list', [SupplierController::class, 'getPurchaseOrders'])->name('purchase-order.list');
+
+    // Purchase Order Management
+    Route::get('/purchase-orders/pending', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'pending'])->name('purchase-orders.pending');
+    Route::get('/purchase-orders/completed', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'completed'])->name('purchase-orders.completed');
+    Route::get('/purchase-orders', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+    Route::get('/purchase-orders/create', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
+    Route::post('/purchase-orders', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+    Route::get('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+    Route::get('/purchase-orders/{purchaseOrder}/edit', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
+    Route::put('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
+    Route::delete('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
+    Route::put('/purchase-orders/{purchaseOrder}/status', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'updateStatus'])->name('purchase-orders.status');
+
+    // Weekly Menu Orders
+    Route::get('/weekly-menu-orders', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'index'])->name('cook.weekly-menu-orders.index');
+    Route::put('/weekly-menu-orders/{weeklyMenuOrder}', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'update'])->name('cook.weekly-menu-orders.update');
+    Route::post('/weekly-menu-orders/{weeklyMenuOrder}/toggle-editability', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'toggleEditability'])->name('cook.weekly-menu-orders.toggle-editability');
 });
 
 // Kitchen Routes
@@ -83,6 +110,7 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
     // Dashboard & Overview
     Route::get('/dashboard', [KitchenDashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('reports');
+    Route::post('/waste-entry', [KitchenDashboardController::class, 'storeWasteEntry'])->name('waste-entry.store');
 
     // Alerts & Notifications
     Route::get('/alerts', [KitchenDashboardController::class, 'alerts'])->name('alerts');
@@ -96,4 +124,13 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
 
     // Settings
     Route::get('/settings', [KitchenDashboardController::class, 'settings'])->name('settings');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('kitchen')->group(function () {
+        Route::get('/', [KitchenDashboardController::class, 'index'])->name('kitchen.index');
+        Route::get('/reportForm', [KitchenDashboardController::class, 'getReportForm'])->name('kitchen.reports_form');
+        Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('kitchen.reports');
+        Route::post('/waste-entry', [KitchenDashboardController::class, 'storeWasteEntry'])->name('kitchen.waste-entry.store');
+    });
 });

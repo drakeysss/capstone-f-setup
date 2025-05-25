@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Capstone') }}</title>
 
     <!-- Fonts -->
@@ -188,6 +189,145 @@
             background-color: #e68900;
             border-color: #e68900;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-title {
+                display: none;
+            }
+
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 0.75rem;
+            }
+
+            .sidebar .nav-link .icon {
+                margin: 0;
+                font-size: 1.25rem;
+            }
+
+            .sidebar .nav-link span {
+                display: none;
+            }
+
+            .sidebar-category {
+                display: none;
+            }
+
+            .sidebar:hover {
+                width: var(--sidebar-width);
+            }
+
+            .sidebar:hover .sidebar-title,
+            .sidebar:hover .sidebar .nav-link span,
+            .sidebar:hover .sidebar-category {
+                display: block;
+            }
+
+            .sidebar:hover .nav-link {
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+            }
+
+            .sidebar:hover .nav-link .icon {
+                margin-right: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: var(--sidebar-width);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-title,
+            .sidebar .nav-link span,
+            .sidebar-category {
+                display: block;
+            }
+
+            .sidebar .nav-link {
+                justify-content: flex-start;
+                padding: 0.75rem 1rem;
+            }
+
+            .sidebar .nav-link .icon {
+                margin-right: 0.75rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .burger-menu {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1040;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 0.375rem;
+                padding: 0.5rem;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .burger-menu:hover {
+                background: var(--secondary-color);
+            }
+
+            .container-fluid {
+                padding: 0.5rem;
+            }
+
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            .table-responsive {
+                margin: 0 -0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 0.5rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .card-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
     </style>
 
     @stack('styles')
@@ -210,6 +350,11 @@
 
             <!-- Main Content -->
             <div class="main-content">
+                <!-- Burger Menu -->
+                <button class="burger-menu d-md-none" onclick="toggleSidebar()">
+                    <i class="bi bi-list"></i>
+                </button>
+
                 @if(session('error'))
                     <div class="alert alert-danger mb-4">
                         {{ session('error') }}
@@ -254,16 +399,23 @@
                     link.classList.add('active');
                 }
             });
+        });
 
-            // Mobile sidebar toggle
-            const mobileSidebar = document.getElementById('mobileSidebar');
-            if (mobileSidebar) {
-                const bsOffcanvas = new bootstrap.Offcanvas(mobileSidebar);
-                
-                document.querySelector('[data-bs-target="#mobileSidebar"]').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    bsOffcanvas.show();
-                });
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const burgerMenu = document.querySelector('.burger-menu');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !burgerMenu.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
             }
         });
     </script>

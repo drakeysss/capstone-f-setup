@@ -10,18 +10,22 @@ class PurchaseOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'supplier_id',
-        'status',
-        'total_amount',
+        'order_date',
+        'total_cost',
+        'status'
     ];
 
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
+    protected $casts = [
+        'order_date' => 'datetime',
+        'total_cost' => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
+    protected $with = ['items'];
 
     public function items()
     {
         return $this->hasMany(PurchaseOrderItem::class);
     }
-}
+} 

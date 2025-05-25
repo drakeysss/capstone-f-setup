@@ -18,14 +18,16 @@
 
     <div class="row">
         <!-- Overview Cards -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Today's Meals</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ count($dailyRecipes) }} Meals
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-calendar-check fa-2x text-gray-300"></i>
@@ -35,31 +37,16 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Active Recipes</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-journal-text fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Low Stock Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"> 
+                                
+                        </div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
@@ -69,23 +56,7 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Pending Alerts</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">7</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-bell fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        
 
     <div class="row">
         <!-- Today's Schedule -->
@@ -99,27 +70,29 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Time</th>
-                                    <th>Meal</th>
+                                    <th>Meal Type</th>
+                                    <th>Meal Name</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>7:00 AM</td>
-                                    <td>Breakfast</td>
-                                    <td><span class="badge bg-success">Completed</span></td>
-                                </tr>
-                                <tr>
-                                    <td>12:00 PM</td>
-                                    <td>Lunch</td>
-                                    <td><span class="badge bg-warning">In Progress</span></td>
-                                </tr>
-                                <tr>
-                                    <td>6:00 PM</td>
-                                    <td>Dinner</td>
-                                    <td><span class="badge bg-secondary">Pending</span></td>
-                                </tr>
+                                @foreach($dailyRecipes as $type => $meal)
+                                    <tr>
+                                        <td>{{ $type }}</td>
+                                        <td>{{ $meal['name'] }}</td>
+                                        <td>
+                                            <span class="badge
+    @if($meal['status'] == 'completed') bg-success
+    @elseif($meal['status'] == 'pending') bg-warning
+    @elseif($meal['status'] == 'in progress') bg-info
+    @else bg-secondary
+    @endif
+                                            ">
+                                                {{ ucfirst($meal['status']) }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

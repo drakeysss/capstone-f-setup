@@ -4,14 +4,11 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
-        <div>
-            <button class="btn btn-outline-primary me-2">
-                <i class="bi bi-download"></i> Export Report
-            </button>
-            <button class="btn btn-outline-secondary">
-                <i class="bi bi-printer"></i> Print Report
-            </button>
-        </div>
+        <button>
+            <a href="{{ route('kitchen.reports_form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-download fa-sm text-white-50"></i>Submit Report
+            </a>
+        </button>
     </div>
 
     <div class="row">
@@ -21,9 +18,9 @@
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Monthly Overview</h6>
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary btn-sm">Day</button>
-                        <button class="btn btn-primary btn-sm">Week</button>
-                        <button class="btn btn-outline-primary btn-sm">Month</button>
+                        <button class="btn btn-outline-primary btn-sm" id="btnDay">Day</button>
+                        <button class="btn btn-primary btn-sm" id="btnWeek">Week</button>
+                        <button class="btn btn-outline-primary btn-sm" id="btnMonth">Month</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -34,42 +31,33 @@
             </div>
         </div>
 
-        <!-- Statistics Cards -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Key Metrics</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Reasons for Wastes</h6>
                 </div>
                 <div class="card-body">
+                    @foreach($wasteReasons as $reason)
                     <div class="mb-4">
-                        <h4 class="small font-weight-bold">Inventory Turnover <span class="float-end">75%</span></h4>
+                        <h4 class="small font-weight-bold">
+                            {{ $reason->report_name }}
+                            <span class="float-end">{{ $reason->percentage }}%</span>
+                        </h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-info" style="width: 75%"></div>
+                            <div class="progress-bar bg-info" style="width: {{ $reason->percentage }}%"></div>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <h4 class="small font-weight-bold">Food Cost Ratio <span class="float-end">60%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" style="width: 60%"></div>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <h4 class="small font-weight-bold">Menu Item Performance <span class="float-end">85%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-success" style="width: 85%"></div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Inventory Analysis -->
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-8">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Inventory Analysis</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Top 5 Food Wastes</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -77,85 +65,24 @@
                             <thead>
                                 <tr>
                                     <th>Category</th>
-                                    <th>Items</th>
-                                    <th>Value</th>
+                                    <th>Quantity</th>
+                                    <th>Cost</th>
                                     <th>Usage</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($topWastes as $waste)
                                 <tr>
-                                    <td>Grains</td>
-                                    <td>15</td>
-                                    <td>₱25,000</td>
+                                    <td>{{ $waste->category }}</td>
+                                    <td>{{ $waste->quantity }}</td>
+                                    <td>₱{{ number_format($waste->cost, 2) }}</td>
                                     <td>
                                         <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" style="width: 75%"></div>
+                                            <div class="progress-bar bg-success" style="width: {{ $waste->usage_percentage }}%"></div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Meat</td>
-                                    <td>20</td>
-                                    <td>₱45,000</td>
-                                    <td>
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-info" style="width: 65%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Vegetables</td>
-                                    <td>25</td>
-                                    <td>₱15,000</td>
-                                    <td>
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-warning" style="width: 85%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Popular Recipes -->
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Popular Recipes</h6>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Recipe</th>
-                                    <th>Servings</th>
-                                    <th>Rating</th>
-                                    <th>Trend</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Chicken Adobo</td>
-                                    <td>250</td>
-                                    <td>4.8/5</td>
-                                    <td><i class="bi bi-arrow-up-circle-fill text-success"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Sinigang</td>
-                                    <td>200</td>
-                                    <td>4.5/5</td>
-                                    <td><i class="bi bi-arrow-up-circle-fill text-success"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Menudo</td>
-                                    <td>180</td>
-                                    <td>4.3/5</td>
-                                    <td><i class="bi bi-dash-circle-fill text-warning"></i></td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -169,35 +96,146 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Monthly Overview Chart
-    var ctx = document.getElementById('monthlyOverviewChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    const ctx = document.getElementById('monthlyOverviewChart');
+    if (!ctx) {
+        console.error('Chart canvas not found');
+        return;
+    }
+
+    const chartData = {
+        day: {
+            labels: ['Breakfast', 'Lunch', 'Dinner'],
+            datasets: [
+                {
+                    label: 'Meals Served',
+                    data: [30, 50, 40],
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    backgroundColor: 'rgba(78, 115, 223, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Food Waste',
+                    data: [5, 8, 6],
+                    borderColor: 'rgba(231, 74, 59, 1)',
+                    backgroundColor: 'rgba(231, 74, 59, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        week: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [
+                {
+                    label: 'Meals Served',
+                    data: [120, 150, 130, 170, 200, 180, 160],
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    backgroundColor: 'rgba(78, 115, 223, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Food Waste',
+                    data: [20, 25, 22, 30, 28, 26, 24],
+                    borderColor: 'rgba(231, 74, 59, 1)',
+                    backgroundColor: 'rgba(231, 74, 59, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        month: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [
+                {
+                    label: 'Meals Served',
+                    data: [400, 450, 500, 550],
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    backgroundColor: 'rgba(78, 115, 223, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Food Waste',
+                    data: [60, 55, 70, 65],
+                    borderColor: 'rgba(231, 74, 59, 1)',
+                    backgroundColor: 'rgba(231, 74, 59, 0.2)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        }
+    };
+
+    const chartConfig = {
         type: 'line',
         data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [{
-                label: 'Meals Served',
-                data: [500, 550, 480, 600],
-                borderColor: '#4e73df',
-                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                tension: 0.3,
-                fill: true
-            }]
+            labels: chartData.month.labels,
+            datasets: chartData.month.datasets
         },
         options: {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return tooltipItems[0].label;
+                        },
+                        label: function(tooltipItem) {
+                            const datasetLabel = tooltipItem.dataset.label;
+                            return datasetLabel + ': ' + tooltipItem.raw;
+                        }
+                    }
                 }
             },
             scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(234, 236, 244, 1)',
+                        zeroLineColor: 'rgba(234, 236, 244, 1)'
+                    }
                 }
             }
         }
-    });
+    };
+
+    let myChart = null;
+    try {
+        myChart = new Chart(ctx, chartConfig);
+    } catch (error) {
+        console.error('Error initializing chart:', error);
+        return;
+    }
+
+    function updateChart(period) {
+        if (!myChart) return;
+        myChart.data.labels = chartData[period].labels;
+        myChart.data.datasets = chartData[period].datasets;
+        myChart.update();
+    }
+
+    const btnDay = document.getElementById('btnDay');
+    const btnWeek = document.getElementById('btnWeek');
+    const btnMonth = document.getElementById('btnMonth');
+
+    if (btnDay) btnDay.addEventListener('click', () => updateChart('day'));
+    if (btnWeek) btnWeek.addEventListener('click', () => updateChart('week'));
+    if (btnMonth) btnMonth.addEventListener('click', () => updateChart('month'));
 });
 </script>
 @endpush

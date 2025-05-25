@@ -14,9 +14,6 @@
                 <i class="bi bi-plus"></i> Add Stock
             </button>
                
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderSuppliesModal">
-                <i class="bi bi-cart"></i> Order Supplies
-            </button>
         </div>
     </div>
         </div>
@@ -24,14 +21,14 @@
 </div>
     <div class="row">
         <!-- Stock Overview Cards -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
+                        <div class="col mr-6">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Total Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">150</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-box fa-2x text-gray-300"></i>
@@ -41,11 +38,11 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
+                        <div class="col mr-6">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Low Stock Items</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
@@ -58,40 +55,7 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Pending Orders</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-clock fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Stock Value</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">₱125,000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-currency-dollar fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+     
 
     <div class="row">
         <!-- Inventory Table -->
@@ -135,30 +99,22 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Rice</td>
-                                    <td>Grains</td>
-                                    <td>50</td>
-                                    <td>kg</td>
-                                    <td>2023-05-01</td>
-                                    <td><span class="badge bg-warning">Low Stock</span></td>
+                                foreach($inventoryItems as $item)
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->category }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $item->unit }}</td>
+                                    <td>{{ $item->last_updated }}</td>
+                                    <td>{{ $item->status }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#orderSuppliesModal">
+                                            Report to Admin
+                                        </button>
+                                        <button class="btn btn-danger btn-sm">
+                                            
+                                        </button>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>Chicken</td>
-                                    <td>Meat</td>
-                                    <td>100</td>
-                                    <td>kg</td>
-                                    <td>2023-05-01</td>
-                                    <td><span class="badge bg-success">In Stock</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                    </td>
+
                                 </tr>
                             </tbody>
                         </table>

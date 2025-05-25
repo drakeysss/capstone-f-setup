@@ -10,10 +10,9 @@ return new class extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
-            $table->json('items');
-            $table->decimal('total_amount', 10, 2);
-            $table->enum('status', ['pending', 'approved', 'delivered'])->default('pending');
+            $table->dateTime('order_date');
+            $table->decimal('total_cost', 10, 2);
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

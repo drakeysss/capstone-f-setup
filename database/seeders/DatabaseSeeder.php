@@ -13,6 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            UsersTableSeeder::class,
+            RecipeTableSeeders::class,
+        ]);
+
         // Create Admin User
         User::create([
             'name' => 'Admin User',
@@ -22,6 +27,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create Cook Users
+        User::create([
+            'name' => 'Cook User',
+            'email' => 'cook@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'cook',
+            'email_verified_at' => now(),
+        ]);
+
         User::create([
             'name' => 'Cristina Manlunas',
             'email' => 'cook1@example.com',

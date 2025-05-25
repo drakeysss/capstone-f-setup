@@ -57,19 +57,13 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('cook.menu') ? 'active' : '' }}" href="{{ route('cook.menu') }}">
                     <i class="bi bi-journal-text icon"></i>
-                    <span class="small">Menu Management</span>
+                    <span class="small">Weekly Menu and Ingredients</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.inventory') ? 'active' : '' }}" href="{{ route('cook.inventory') }}">
-                    <i class="bi bi-box icon"></i>
-                    <span class="small">Stock Management</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.suppliers.index') ? 'active' : '' }}" href="{{ route('cook.suppliers.index') }}">
-                    <i class="bi bi-truck icon"></i>
-                    <span class="small">Suppliers</span>
+                <a class="nav-link {{ request()->routeIs('cook.purchase-orders.*') ? 'active' : '' }}" href="{{ route('cook.purchase-orders.index') }}">
+                    <i class="bi bi-cart-check icon"></i>
+                    <span class="small">Purchase Orders</span>
                 </a>
             </li>
         </ul>
@@ -86,13 +80,6 @@
 
         <div class="sidebar-category">GENERAL</div>
         <ul class="sidebar-nav">
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.settings') ? 'active' : '' }}" href="{{ route('cook.settings') }}">
-                    <i class="bi bi-gear icon"></i>
-                    <span class="small">Settings</span>
-                </a>
-            </li>
-            <hr>
             <li class="nav-item">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

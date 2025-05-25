@@ -20,76 +20,56 @@
 
     <!-- Quick Stats -->
     <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card pending">
-                <div class="stat-icon">
-                    <i class="bi bi-clock-history"></i>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <a href="{{ route('cook.purchase-orders.pending') }}" style="text-decoration: none;">
+                <div class="stat-card pending">
+                    <div class="stat-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ $pendingOrders ?? 0 }}</h3>
+                        <p>Pending Orders</p>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>{{ $pendingOrders ?? 0 }}</h3>
-                    <p>Pending Orders</p>
-                </div>
-            </div>
+            </a>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card completed">
-                <div class="stat-icon">
-                    <i class="bi bi-check-circle"></i>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <a href="{{ route('cook.purchase-orders.completed') }}" style="text-decoration: none;">
+                <div class="stat-card completed">
+                    <div class="stat-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ $completedOrders ?? 0 }}</h3>
+                        <p>Completed Orders</p>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>{{ $completedOrders ?? 0 }}</h3>
-                    <p>Completed Orders</p>
-                </div>
-            </div>
+            </a>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card inventory">
-                <div class="stat-icon">
-                    <i class="bi bi-box-seam"></i>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <a href="{{ route('cook.inventory.low-stock') }}" style="text-decoration: none;">
+                <div class="stat-card inventory">
+                    <div class="stat-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ $lowStockItems ?? 0 }}</h3>
+                        <p>Low Stock Items</p>
+                    </div>
                 </div>
-                <div class="stat-info">
-                    <h3>{{ $lowStockItems ?? 0 }}</h3>
-                    <p>Low Stock Items</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card menu">
-                <div class="stat-icon">
-                    <i class="bi bi-menu-button-wide"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>{{ $activeMenuItems ?? 0 }}</h3>
-                    <p>Active Menu Items</p>
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="row">
         <!-- Recent Orders -->
-        <div class="col-xl-6 mb-4">
-            <div class="card main-card h-100">
+        <div class="col-12 mb-4">
+            <div class="card main-card">
                 <div class="card-header">
                     <h5 class="card-title">Recent Orders</h5>
-                    <div class="card-actions">
-                        <div class="dropdown">
-                            <button class="btn btn-filter" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-filter"></i> Filter
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-filter="all">All Orders</a></li>
-                                <li><a class="dropdown-item" href="#" data-filter="pending">Pending</a></li>
-                                <li><a class="dropdown-item" href="#" data-filter="completed">Completed</a></li>
-                                <li><a class="dropdown-item" href="#" data-filter="cancelled">Cancelled</a></li>
-                            </ul>
-                        </div>
-                        <a href="{{ route('cook.orders') }}" class="btn btn-view-all">View All</a>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -97,46 +77,36 @@
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>Items</th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Price</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($recentOrders ?? [] as $order)
-                                <tr>
-                                    <td>#{{ $order->id }}</td>
-                                    <td>
-                                        <div class="order-items">
-                                            @foreach($order->items->take(2) as $item)
-                                            <span class="badge bg-primary me-1">{{ $item->quantity }}x {{ $item->name }}</span>
-                                            @endforeach
-                                            @if($order->items->count() > 2)
-                                            <span class="badge bg-secondary">+{{ $order->items->count() - 2 }} more</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="status-badge {{ $order->status }}">
-                                            {{ ucfirst($order->status) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-icon" onclick="viewOrder({{ $order->id }})">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            @if($order->status === 'pending')
-                                            <button class="btn btn-icon" onclick="completeOrder({{ $order->id }})">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
+                                    @foreach($order->items as $index => $item)
+                                    <tr>
+                                        @if($index === 0)
+                                            <td rowspan="{{ count($order->items) }}">#{{ $order->id }}</td>
+                                        @endif
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td>{{ $item->unit }}</td>
+                                        <td>₱{{ number_format($item->price, 2) }}</td>
+                                        @if($index === 0)
+                                            <td rowspan="{{ count($order->items) }}">
+                                                <span class="status-badge {{ $order->status }}">
+                                                    {{ ucfirst($order->status) }}
+                                                </span>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                    @endforeach
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">No orders found</td>
+                                    <td colspan="6" class="text-center">No orders found</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -147,14 +117,14 @@
         </div>
 
         <!-- Menu Overview -->
-        <div class="col-xl-6 mb-4">
-            <div class="card main-card h-100">
+        <div class="col-12 mb-4">
+            <div class="card main-card">
                 <div class="card-header">
                     <h5 class="card-title">Menu Overview</h5>
                     <a href="{{ route('cook.menu') }}" class="btn btn-view-all">View All</a>
                 </div>
                 <div class="card-body">
-                    <div class="row h-100">
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="overview-stats">
                                 <div class="stat">
@@ -172,137 +142,21 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Item Name</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
+                                            <th>Meal Type</th>
+                                            <th>Menu Item</th>
+                                            <th>Ingredients</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($menuItems->take(3) ?? [] as $item)
+                                        @forelse($weeklyMenu ?? [] as $menu)
                                         <tr>
-                                            <td>{{ $item->name }}</td>
-                                            <td>₱{{ number_format($item->price, 2) }}</td>
-                                            <td>
-                                                <span class="status-badge {{ $item->status }}">
-                                                    {{ ucfirst($item->status) }}
-                                                </span>
-                                            </td>
+                                            <td>{{ ucfirst($menu->meal_type) }}</td>
+                                            <td>{{ $menu->menu_item }}</td>
+                                            <td>{{ $menu->ingredients }}</td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">No menu items</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Inventory Overview -->
-        <div class="col-xl-6 mb-4">
-            <div class="card main-card h-100">
-                <div class="card-header">
-                    <h5 class="card-title">Inventory Overview</h5>
-                    <a href="{{ route('cook.inventory') }}" class="btn btn-view-all">View All</a>
-                </div>
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-4">
-                            <div class="overview-stats">
-                                <div class="stat">
-                                    <span class="stat-value">{{ $lowStockItems ?? 0 }}</span>
-                                    <span class="stat-label">Low Stock</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">{{ $totalItems ?? 0 }}</span>
-                                    <span class="stat-label">Total Items</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Item Name</th>
-                                            <th>Quantity</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($lowStockItemsList->take(3) ?? [] as $item)
-                                        <tr>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->quantity }}</td>
-                                            <td>
-                                                <span class="status-badge warning">
-                                                    Low Stock
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">No low stock items</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Suppliers Overview -->
-        <div class="col-xl-6 mb-4">
-            <div class="card main-card h-100">
-                <div class="card-header">
-                    <h5 class="card-title">Suppliers Overview</h5>
-                    <a href="{{ route('cook.suppliers.index') }}" class="btn btn-view-all">View All</a>
-                </div>
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-4">
-                            <div class="overview-stats">
-                                <div class="stat">
-                                    <span class="stat-value">{{ $activeSuppliers ?? 0 }}</span>
-                                    <span class="stat-label">Active Suppliers</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">{{ $pendingOrders ?? 0 }}</span>
-                                    <span class="stat-label">Pending Orders</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Supplier Name</th>
-                                            <th>Status</th>
-                                            <th>Last Order</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($recentSuppliers->take(3) ?? [] as $supplier)
-                                        <tr>
-                                            <td>{{ $supplier->name }}</td>
-                                            <td>
-                                                <span class="status-badge {{ $supplier->status }}">
-                                                    {{ ucfirst($supplier->status) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $supplier->last_order_date ? $supplier->last_order_date->format('M d') : 'N/A' }}</td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">No recent suppliers</td>
+                                            <td colspan="3" class="text-center">No menu items for Week 1 & 3 Saturday</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -359,6 +213,7 @@
         gap: 1rem;
         box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         transition: transform 0.2s;
+        height: 100%;
     }
 
     .stat-card:hover {
@@ -398,11 +253,6 @@
 
     .inventory .stat-icon {
         background-color: #36b9cc;
-        color: white;
-    }
-
-    .menu .stat-icon {
-        background-color: #4e73df;
         color: white;
     }
 
@@ -527,6 +377,53 @@
         font-size: 0.875rem;
     }
 
+    .order-details {
+        padding: 0.5rem 0;
+    }
+
+    .order-item {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        background: #f8f9fc;
+        border-radius: 0.35rem;
+    }
+
+    .order-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .item-name {
+        font-weight: 600;
+        color: #4e73df;
+        margin-bottom: 0.25rem;
+    }
+
+    .item-details {
+        display: flex;
+        gap: 1rem;
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .item-details span {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .item-details .quantity {
+        font-weight: 600;
+        color: #1cc88a;
+    }
+
+    .item-details .unit {
+        color: #858796;
+    }
+
+    .item-details .price {
+        color: #4e73df;
+        font-weight: 600;
+    }
+
     /* Status Badges */
     .status-badge {
         padding: 0.35rem 0.65rem;
@@ -597,14 +494,34 @@
 
     // Order actions
     function viewOrder(orderId) {
-        // Implement view order functionality
-        console.log('Viewing order:', orderId);
+        window.location.href = `/cook/orders/${orderId}`;
+    }
+
+    function viewPurchaseOrder(orderId) {
+        window.location.href = `/cook/purchase-orders/${orderId}`;
     }
 
     function completeOrder(orderId) {
-        // Implement complete order functionality
         if (confirm('Are you sure you want to mark this order as completed?')) {
-            console.log('Completing order:', orderId);
+            fetch(`/cook/orders/${orderId}/complete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to complete order. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
         }
     }
 </script>

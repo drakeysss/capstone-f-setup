@@ -7,7 +7,7 @@
             <h4>Purchase Order</h4>
         </div>
         <div class="card-body">
-            <form id="purchaseOrderForm" action="{{ route('cook.suppliers.purchase-order') }}" method="POST">
+            <form id="purchaseOrderForm">
                 @csrf
                 <div class="table-responsive">
                     <table class="table table-bordered" id="purchaseOrderTable">
@@ -87,13 +87,11 @@
                 <table class="table table-bordered" id="savedOrdersTable">
                     <thead>
                         <tr>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Unit Price</th>
-                            <th>Cost</th>
+                            <th>Order ID</th>
                             <th>Date</th>
-                            <th>Actions</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,6 +112,14 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+    .items-list {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    .items-list li {
+        margin-bottom: 5px;
+    }
 </style>
 @endpush
 
@@ -121,10 +127,58 @@
 <script>
 $(document).ready(function() {
     // Initialize DataTables
-    $('#savedOrdersTable').DataTable({
+    const savedOrdersTable = $('#savedOrdersTable').DataTable({
         responsive: true,
-        order: [[5, 'desc']]
+        order: [[1, 'desc']],
+        columns: [
+            { data: 'id' },
+            { 
+                data: 'created_at',
+                render: function(data) {
+                    return moment(data).format('MMM D, YYYY h:mm A');
+                }
+            },
+            { 
+                data: 'items',
+                render: function(data) {
+                    return `<ul class="items-list">
+                        ${data.map(item => `
+                            <li>${item.description} - ${item.quantity} ${item.unit} (₱${item.unit_price}/unit)</li>
+                        `).join('')}
+                    </ul>`;
+                }
+            },
+            { 
+                data: 'total_amount',
+                render: function(data) {
+                    return '₱' + parseFloat(data).toFixed(2);
+                }
+            },
+            { 
+                data: 'status',
+                render: function(data) {
+                    const statusClass = {
+                        'pending': 'warning',
+                        'approved': 'success',
+                        'delivered': 'info'
+                    }[data] || 'secondary';
+                    return `<span class="badge bg-${statusClass}">${data.charAt(0).toUpperCase() + data.slice(1)}</span>`;
+                }
+            }
+        ]
     });
+
+    // Load saved purchase orders
+    function loadPurchaseOrders() {
+        $.get('/cook/suppliers/purchase-orders', function(response) {
+            if (response.success) {
+                savedOrdersTable.clear().rows.add(response.purchase_orders).draw();
+            }
+        });
+    }
+
+    // Load initial purchase orders
+    loadPurchaseOrders();
 
     // Function to calculate cost
     function calculateCost(row) {
@@ -194,8 +248,7 @@ $(document).ready(function() {
                 description: row.find('.description').val(),
                 quantity: row.find('.quantity').val(),
                 unit: row.find('.unit').val(),
-                unit_price: row.find('.unit-price').val(),
-                cost: row.find('.cost').val()
+                unit_price: row.find('.unit-price').val()
             };
 
             if (!item.description || !item.quantity || !item.unit || !item.unit_price) {
@@ -216,8 +269,46 @@ $(document).ready(function() {
             return;
         }
 
-        // Submit the form
-        this.submit();
+        // Submit the form via AJAX
+        $.ajax({
+            url: '/cook/suppliers/purchase-order',
+            method: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                items: formData
+            },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.message,
+                        icon: 'success'
+                    }).then(() => {
+                        // Clear form
+                        $('#purchaseOrderTable tbody tr:not(:first)').remove();
+                        $('#purchaseOrderTable tbody tr:first').find('input').val('');
+                        $('#purchaseOrderTable tbody tr:first').find('select').val('');
+                        updateTotalCost();
+                        
+                        // Reload purchase orders
+                        loadPurchaseOrders();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message,
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to save purchase order. Please try again.',
+                    icon: 'error'
+                });
+            }
+        });
     });
 });
 </script>
