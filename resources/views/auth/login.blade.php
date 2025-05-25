@@ -6,7 +6,7 @@
         <div class="login-content">
             <div class="card p-4">
                 <div class="text-center mb-4">
-                    <img src="https://cdn.jobs.makesense.org/projects/243/project/1644249853968kzcvwr2o.png" 
+                    <img src="https://scontent.fceb5-1.fna.fbcdn.net/v/t39.30808-6/461480703_834258748868697_6464061136804155402_n.png?stp=dst-png_s960x960&_nc_cat=106&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeFLalIAk3PI7kPbR1-RqENX2wV5_H-rwfXbBXn8f6vB9fFHsKhpN3ThEd64pFPDA2uPIF7shQ1shi7QAhwjtbxM&_nc_ohc=cUBgcF1WFooQ7kNvwEhLbDw&_nc_oc=AdkAHXIjENrtNuPcYcTK6yLUY9QFG4W4vcNFg9JjE4hKxLSHGnJ5tfXEYLAAFpWiSr0&_nc_zt=23&_nc_ht=scontent.fceb5-1.fna&_nc_gid=h6mPsd9F3na-KRKbaiMBeA&oh=00_AfJttPQ7MaM6vHqKI1O_Sf6fvsza8hmL2zQZY9qd4oVN3Q&oe=682FADA3.png" 
                          alt="Logo" class="mb-3" style="max-width:240px; height:auto;">
                 </div>
 

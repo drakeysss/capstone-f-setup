@@ -77,9 +77,15 @@
             text-align: center;
         }
 
-        .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            color: #fff;
+            color: #ffffff;
+            background-color: #22bbea;
+            font-weight: bold;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: #ffffff;
+            background-color: var(--primary-color);
             transform: translateX(3px);
         }
 
@@ -138,11 +144,16 @@
             margin: 0.2rem 0;
         }
 
-        .nav-link:hover,
         .nav-link.active {
-            color: var(--primary-color);
-            background-color: rgba(78, 115, 223, 0.1);
-            font-weight: 600;
+            color: #ffffff;
+            background-color: #22bbea;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            color: #ffffff;
+            background-color: var(--primary-color);
+            transform: translateX(3px);
         }
 
         .navbar-brand {
@@ -340,21 +351,33 @@
             <!-- Sidebar -->
             @if(Auth::user()->role == 'student')
                 @include('Component.student-sidebar')
+                <!-- Header -->
+                @include('Component.student-header')
             @elseif(Auth::user()->role == 'cook')
                 @include('Component.cook-sidebar')
+                <!-- Header -->
+                @include('Component.cook-header')
             @elseif(Auth::user()->role == 'kitchen')
                 @include('Component.kitchen-sidebar')
+                <!-- Header -->
+                @include('Component.kitchen-header')
             @else
                 @include('Component.admin-sidebar')
+                <!-- Header -->
+                @include('Component.admin-header')
             @endif
 
             <!-- Main Content -->
+<<<<<<< HEAD
             <div class="main-content">
                 <!-- Burger Menu -->
                 <button class="burger-menu d-md-none" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>
                 </button>
 
+=======
+            <main class="main-content" style="margin-left:250px; padding-top:60px; min-height:calc(100vh - 70px); margin-top:20px; background:#f8f9fc;">
+>>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
                 @if(session('error'))
                     <div class="alert alert-danger mb-4">
                         {{ session('error') }}
@@ -366,7 +389,7 @@
                     </div>
                 @endif
                 @yield('content')
-            </div>
+            </main>
         @endif
     @else
         <div class="auth-wrapper d-flex align-items-center justify-content-center p-4">

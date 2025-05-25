@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+<<<<<<< HEAD
             UsersTableSeeder::class,
             RecipeTableSeeders::class,
         ]);
@@ -81,5 +80,9 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
             ]);
         }
+=======
+            UsersTableSeeder::class
+        ]);
+>>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
     }
 }
