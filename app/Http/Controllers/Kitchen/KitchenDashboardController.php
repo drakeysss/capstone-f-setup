@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Kitchen;
 
 use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
+use App\Models\Recipe;
 
 class KitchenDashboardController extends BaseDashboardController
 {
@@ -20,14 +21,59 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Recipe & Meal
+    public function mealPlanning()
+    {
+
+            $all = Recipe::all();
+
+
+            $recipes = $all
+      ->mapWithKeys(fn($r) => [
+         $r->recipe_name => [
+           'week' => $r->recipe_week,
+           'day'  => $r->recipe_day,
+           'type' => $r->recipe_type
+         ]
+      ]);
+
+        $grouped = $all->groupBy('recipe_week');
+
+      $weekMenus = [
+        1 => $grouped->get('Week 1 & 3')
+              ->groupBy('recipe_day')
+              ->map(fn($dayGroup) => [
+                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
+              ])
+              ->values(), 
+
+        2 => $grouped->get('Week 2 & 4')
+              ->groupBy('recipe_day')
+              ->map(fn($dayGroup) => [
+                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
+              ])
+              ->values(),
+      ];
+
+
+      $recipesJson = json_encode($recipes); 
+      $weekMenusJson = json_encode($weekMenus); 
+  
+
+      return view('kitchen.meal-planning', [
+        'recipesJson'  => $recipesJson,
+        'weekMenusJson'=> $weekMenusJson,
+      ]);
+    }
+
     public function recipes()
     {
         return view('kitchen.recipes');
-    }
-
-    public function mealPlanning()
-    {
-        return view('kitchen.meal-planning');
     }
 
     public function preparation()
