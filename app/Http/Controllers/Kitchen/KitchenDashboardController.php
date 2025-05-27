@@ -114,6 +114,28 @@ class KitchenDashboardController extends BaseDashboardController
         return view('kitchen.analytics', $data);
     }
 
+    public function viewReport()
+    {
+        return view('kitchen.reportsForm');
+    }
+
+
+    public function storeReport(Request $request)
+    {
+        // Handle the report submission logic here
+        // For example, validate and save the report data
+        $request->validate([
+            'report_type' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'date' => 'required|date',
+            
+        ]);
+        // Redirect or return a response as needed
+        return redirect()->route('kitchen.reports')->with('success', 'Report submitted successfully.');
+    }
+
+
+
     // Alerts & Notifications
     public function notifications()
     {

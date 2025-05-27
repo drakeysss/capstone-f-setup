@@ -1,16 +1,23 @@
 @extends('layouts.app')
 
+
+
+
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
         <div>
-            <button class="btn btn-outline-primary me-2">
-                <i class="bi bi-download"></i> Export Report
+
+        
+            <button class="btn btn-sm btn-primary shadow-sm">
+            <a href="{{ route('kitchen.reportsForm') }}" class="text-white text-decoration-none">
+                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+            </a>
             </button>
-            <button class="btn btn-outline-secondary">
-                <i class="bi bi-printer"></i> Print Report
-            </button>
+
+            
+
         </div>
     </div>
 
@@ -137,26 +144,6 @@
                                     <th>Trend</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Chicken Adobo</td>
-                                    <td>250</td>
-                                    <td>4.8/5</td>
-                                    <td><i class="bi bi-arrow-up-circle-fill text-success"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Sinigang</td>
-                                    <td>200</td>
-                                    <td>4.5/5</td>
-                                    <td><i class="bi bi-arrow-up-circle-fill text-success"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>Menudo</td>
-                                    <td>180</td>
-                                    <td>4.3/5</td>
-                                    <td><i class="bi bi-dash-circle-fill text-warning"></i></td>
-                                </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -167,38 +154,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Monthly Overview Chart
-    var ctx = document.getElementById('monthlyOverviewChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [{
-                label: 'Meals Served',
-                data: [500, 550, 480, 600],
-                borderColor: '#4e73df',
-                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-});
-</script>
+<script src="{{ asset('js/kitchen/reports.js') }}"></script>
+
 @endpush
 @endsection

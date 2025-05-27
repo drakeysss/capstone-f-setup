@@ -14,19 +14,12 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id('ingredient_id');
             $table->string('ingredient_name');
-            $table->string('ingredient_type')->nullable();
             $table->string('ingredient_unit')->nullable();
             $table->decimal('ingredient_price', 8, 2)->nullable();
             $table->unsignedInteger('ingredient_quantity')->nullable();
             $table->timestamps();
-
-            $table->foreignId('recipe_id')
-                ->constrained('recipes', 'recipe_id')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */
