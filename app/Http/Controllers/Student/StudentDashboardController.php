@@ -91,4 +91,14 @@ class StudentDashboardController extends BaseDashboardController
             'report' => $report
         ]);
     }
+
+    public function history()
+    {
+        $orders = Auth::user()->orders()
+            ->with(['items.menu'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('student.history', compact('orders'));
+    }
 }

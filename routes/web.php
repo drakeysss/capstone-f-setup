@@ -12,6 +12,8 @@ use App\Http\Controllers\Cook\MenuController;
 use App\Http\Controllers\Cook\InventoryController;
 use App\Http\Controllers\Cook\OrderController;
 use App\Http\Controllers\Kitchen\KitchenDashboardController;
+use App\Http\Controllers\Student\StudentReportController;
+use App\Http\Controllers\Student\StudentHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +43,8 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/menu', [StudentDashboardController::class, 'menu'])->name('menu');
     Route::get('/notifications', [StudentDashboardController::class, 'notifications'])->name('notifications');
     Route::get('/settings', [StudentDashboardController::class, 'settings'])->name('settings');
-    Route::get('/history', [StudentDashboardController::class, 'history'])->name('history');
+    Route::get('/history', [StudentHistoryController::class, 'index'])->name('history');
+    Route::put('/history/{report}', [StudentHistoryController::class, 'updateRating'])->name('history.update');
     Route::get('/reports', [StudentDashboardController::class, 'reports'])->name('reports');
     Route::post('/reports', [StudentDashboardController::class, 'storeReport'])->name('reports.store');
 });
@@ -96,4 +99,11 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
 
     // Settings
     Route::get('/settings', [KitchenDashboardController::class, 'settings'])->name('settings');
+});
+
+// Student Reports Routes
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/student/reports', [StudentReportController::class, 'index'])->name('student.reports');
+    Route::put('/student/reports/{report}', [StudentReportController::class, 'update'])->name('student.reports.update');
+    Route::delete('/student/reports/{report}', [StudentReportController::class, 'destroy'])->name('student.reports.destroy');
 });

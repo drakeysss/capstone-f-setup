@@ -68,5 +68,10 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
             ]);
         }
+
+        $this->call([
+            StudentMealSeeder::class,
+            MenuSeeder::class,
+        ]);
     }
 }
