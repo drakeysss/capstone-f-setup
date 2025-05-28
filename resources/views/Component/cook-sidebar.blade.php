@@ -133,6 +133,12 @@
                     <span class="small">Purchase Orders</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cook.weekly-menu-orders.*') ? 'active' : '' }}" href="{{ route('cook.weekly-menu-orders.index') }}">
+                    <i class="bi bi-calendar-week"></i>
+                    <span>Weekly Menu Orders</span>
+                </a>
+            </li>
         </ul>
 
         <div class="sidebar-category">ANALYTICS</div>
@@ -147,7 +153,6 @@
 
         <div class="sidebar-category">GENERAL</div>
         <ul class="sidebar-nav">
-<<<<<<< HEAD
             <li class="nav-item">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -157,9 +162,6 @@
                     </button>
                 </form>
             </li>
-=======
-
->>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
         </ul>
     </div>
 </nav>

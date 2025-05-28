@@ -2,39 +2,6 @@
 
 @section('content')
 <div class="col-12 mb-4">
-<<<<<<< HEAD
-            <div class="card border-0 bg-primary text-white overflow-hidden">
-                <div class="card-body p-4 position-relative" style="background-color: var(--secondary-color);">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h4 class="fw-bold mb-1" >Inventory Management</h4>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-cup-hot display-4 opacity-25"></i>
-                            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#addStockModal">
-                <i class="bi bi-plus"></i> Add Stock
-            </button>
-               
-        </div>
-    </div>
-        </div>
-    </div>
-</div>
-    <div class="row">
-        <!-- Stock Overview Cards -->
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-6">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-box fa-2x text-gray-300"></i>
-                        </div>
-=======
     <div class="card border-0 bg-primary text-white overflow-hidden">
         <div class="card-body p-4 position-relative" style="background-color: var(--secondary-color);">
             <div class="row align-items-center">
@@ -51,6 +18,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <!-- Stock Overview Cards -->
     <div class="col-xl-6 col-md-6 mb-4">
@@ -64,33 +32,12 @@
                     </div>
                     <div class="col-auto">
                         <i class="bi bi-box fa-2x text-gray-300"></i>
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<<<<<<< HEAD
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-6">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Low Stock Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-     
-=======
     <div class="col-xl-6 col-md-6 mb-4">
         <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
@@ -107,7 +54,6 @@
             </div>
         </div>
     </div>
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 
     <div class="row">
         <!-- Inventory Table -->
@@ -149,69 +95,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-<<<<<<< HEAD
-                                <tr>
-                                foreach($inventoryItems as $item)
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category }}</td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->unit }}</td>
-                                    <td>{{ $item->last_updated }}</td>
-                                    <td>{{ $item->status }}</td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#orderSuppliesModal">
-                                            Report to Admin
-                                        </button>
-                                        <button class="btn btn-danger btn-sm">
-                                            
-                                        </button>
-                                    </td>
-
-                                </tr>
-=======
                                 @foreach ($ingredients as $ingredient)
                                 @php
-                                if($ingredient->ingredient_quantity < 10) {
-                                    $status='low stock' ;
+                                    if($ingredient->ingredient_quantity < 10) {
+                                        $status = 'low stock';
                                     } elseif($ingredient->ingredient_quantity == 0) {
-                                    $status = 'out of stock';
+                                        $status = 'out of stock';
                                     } else {
-                                    $status = 'in stock';
+                                        $status = 'in stock';
                                     }
-
-                                    @endphp
-                                    <tr class="searchable-item filterable-item" data-status="{{ $ingredient->data_status }}">
-                                        <td>{{ $ingredient->ingredient_name }}</td>
-                                        <td>{{ $ingredient->ingredient_category }}</td>
-                                        <td>{{ $ingredient->ingredient_quantity }}</td>
-                                        <td>{{ $ingredient->ingredient_price }}</td>
-                                        <td>{{ $ingredient->updated_at->format('Y-m-d') }}</td>
-                                        <td>
-                                            @if($ingredient->ingredient_quantity < 10)
-                                                <span class="badge bg-warning">Low Stock</span>
-                                                @elseif($ingredient->ingredient_quantity == 0)
-                                                <span class="badge bg-danger">Out of Stock</span>
-                                                @else
-                                                <span class="badge bg-success">In Stock</span>
-                                                @endif
-                                        <td>
-                                            
-                                            <a href="{{ route('kitchen.inventory.show', $ingredient->id) }}" class="btn btn-sm btn-info">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <a href="{{ route('kitchen.inventory.update', $ingredient->id) }}" class="btn btn-sm btn-warning">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <a href="{{ route('kitchen.inventory.delete', $ingredient->id) }}" class="btn btn-sm btn-danger">
+                                @endphp
+                                <tr class="searchable-item filterable-item" data-status="{{ $ingredient->data_status }}">
+                                    <td>{{ $ingredient->ingredient_name }}</td>
+                                    <td>{{ $ingredient->ingredient_category }}</td>
+                                    <td>{{ $ingredient->ingredient_quantity }}</td>
+                                    <td>{{ $ingredient->ingredient_unit }}</td>
+                                    <td>{{ $ingredient->updated_at->format('Y-m-d') }}</td>
+                                    <td>
+                                        @if($ingredient->ingredient_quantity < 10)
+                                            <span class="badge bg-warning">Low Stock</span>
+                                        @elseif($ingredient->ingredient_quantity == 0)
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                        @else
+                                            <span class="badge bg-success">In Stock</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('kitchen.ingredient.show', ['id' => $ingredient->ingredient_id]) }}" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ route('kitchen.ingredient.update', ['id' => $ingredient->ingredient_id]) }}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="{{ route('kitchen.ingredient.delete', ['id' => $ingredient->ingredient_id]) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this ingredient?')">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    </tr>
-
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -219,65 +144,63 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Add Stock Modal -->
-    <div class="modal fade" id="addStockModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Stock</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Item Name</label>
-                            <input type="text" class="form-control" required>
+<!-- Add Stock Modal -->
+<div class="modal fade" id="addStockModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('kitchen.ingredient.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label">Item Name</label>
+                        <input type="text" name="ingredient_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="ingredient_category" class="form-select">
+                            <option>Grains</option>
+                            <option>Meat</option>
+                            <option>Vegetables</option>
+                            <option>Fruits</option>
+                            <option>Condiments</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" name="ingredient_quantity" class="form-control" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Category</label>
-                            <select class="form-select">
-                                <option>Grains</option>
-                                <option>Meat</option>
-                                <option>Vegetables</option>
-                                <option>Fruits</option>
-                                <option>Condiments</option>
+                        <div class="col">
+                            <label class="form-label">Unit</label>
+                            <select name="ingredient_unit" class="form-select">
+                                <option>kg</option>
+                                <option>g</option>
+                                <option>L</option>
+                                <option>ml</option>
+                                <option>pcs</option>
                             </select>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label class="form-label">Quantity</label>
-                                <input type="number" class="form-control" required>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Unit</label>
-                                <select class="form-select">
-                                    <option>kg</option>
-                                    <option>g</option>
-                                    <option>L</option>
-                                    <option>ml</option>
-                                    <option>pcs</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Expiry Date</label>
-                            <input type="date" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Notes</label>
-                            <textarea class="form-control"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" name="ingredient_price" class="form-control" step="0.01">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="{{ asset('js/kitchen/inventoryLogic.js') }}"></script>
+<script src="{{ asset('js/kitchen/inventoryLogic.js') }}"></script>
 
-    @endsection
+@endsection

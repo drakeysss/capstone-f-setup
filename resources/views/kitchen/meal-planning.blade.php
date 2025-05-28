@@ -5,6 +5,7 @@
 <script>
     const recipes   = JSON.parse(@json($recipesJson));
     const weekMenus = JSON.parse(@json($weekMenusJson));
+    console.log('weekMenus:', weekMenus);
 </script>
 
 <link rel="stylesheet" href="{{ asset('css/kitchen/meal-planning.css') }}">
@@ -41,7 +42,7 @@
 
     <!-- Meal Schedule Table -->
     <div class="card shadow-sm">
-</div>
+    </div>
     </div>
 
     <!-- Meal Schedule Table -->
@@ -83,7 +84,6 @@
 
 <script>
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const weekMenus = @json($recipes);
     
     function showWeek(week) {
         const tbody = document.getElementById('week-rows');
@@ -117,8 +117,6 @@
                     <span class="small text-muted">${meals.Dinner && meals.Dinner.name ? meals.Dinner.name : '-'}</span>
                     ${meals.Dinner && meals.Dinner.status ? `<br><span class="badge ${meals.Dinner.status === 'available' ? 'bg-success' : (meals.Dinner.status === 'low stock' ? 'bg-warning' : 'bg-secondary')}">${meals.Dinner.status}</span>` : ''}
                 </td> 
-
-
             `;
             tbody.appendChild(row);
         });

@@ -2,11 +2,7 @@
 
 namespace Database\Seeders;
 
-<<<<<<< HEAD
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-=======
 use App\Models\Ingredient;
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,32 +13,6 @@ class IngredientSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        DB::table('ingredients')->insert([
-            [
-                'name' => 'Flour',
-                'unit' => 'grams',
-                'quantity' => 500,
-                'price' => 1.50,
-                'recipe_id' => 1,
-            ],
-            [
-                'name' => 'Sugar',
-                'unit' => 'grams',
-                'quantity' => 200,
-                'price' => 0.80,
-                'recipe_id' => 1,
-            ],
-            [
-                'name' => 'Butter',
-                'unit' => 'grams',
-                'quantity' => 100,
-                'price' => 2.00,
-                'recipe_id' => 1,
-            ],
-        ]);
-
-=======
        
         $ingredients = [
             'CHICKEN LOAF' => 37.00,
@@ -143,6 +113,5 @@ class IngredientSeeder extends Seeder
     
         $enumValues = array_map(fn($value) => trim($value, "'"), explode(',', $matches[1]));
         return $enumValues;
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     }
 }

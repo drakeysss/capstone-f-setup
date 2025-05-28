@@ -73,11 +73,8 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
 
     // Inventory Management
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
-<<<<<<< HEAD
     Route::get('/inventory/low-stock', [OrderController::class, 'lowStockItems'])->name('inventory.low-stock');
-=======
     Route::get('/inventory/{item}', [InventoryController::class, 'viewIngredient'])->name('inventory.show');
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
     Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.delete');
@@ -111,28 +108,16 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::post('/weekly-menu-orders/{weeklyMenuOrder}/toggle-editability', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'toggleEditability'])->name('cook.weekly-menu-orders.toggle-editability');
 });
 
-
-
-
-
-
 // Kitchen Routes
 Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')->group(function () {
     // Dashboard & Overview
     Route::get('/dashboard', [KitchenDashboardController::class, 'dashboard'])->name('dashboard');
 
-
     // Reports & Analytics
     Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('reports');
-<<<<<<< HEAD
     Route::post('/waste-entry', [KitchenDashboardController::class, 'storeWasteEntry'])->name('waste-entry.store');
-=======
     Route::get('/reports/form', [KitchenDashboardController::class, 'viewReport'])->name('reportsForm');
     Route::post('/reports/store', [KitchenDashboardController::class, 'storeReport'])->name('reports.store');
-
-
-
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 
     // Alerts & Notifications
     Route::get('/alerts', [KitchenDashboardController::class, 'alerts'])->name('alerts');
@@ -144,17 +129,18 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
     // Inventory Management
     Route::get('/inventory', [KitchenDashboardController::class, 'inventory'])->name('inventory');
     Route::get('/inventory/dashboard', [KitchenDashboardController::class, 'inventoryDashboard'])->name('inventory.dashboard');
-
-    Route::get('/inventory/{id}', [KitchenDashboardController::class, 'viewIngredient'])->name('inventory.show');
-    Route::post('/inventory', [KitchenDashboardController::class, 'storeIngredient'])->name('inventory.store');
-    Route::put('/inventory/{id}', [KitchenDashboardController::class, 'updateIngredient'])->name('inventory.update');
-    Route::delete('/inventory/{id}', [KitchenDashboardController::class, 'destroyIngredient'])->name('inventory.delete');
+    Route::get('/inventory/generate', [KitchenDashboardController::class, 'generateInventory'])->name('inventory.generate');
+    
+    // Individual Ingredient Operations
+    Route::get('/ingredient/{id}', [KitchenDashboardController::class, 'viewIngredient'])->name('ingredient.show');
+    Route::post('/ingredient', [KitchenDashboardController::class, 'storeIngredient'])->name('ingredient.store');
+    Route::put('/ingredient/{id}', [KitchenDashboardController::class, 'updateIngredient'])->name('ingredient.update');
+    Route::delete('/ingredient/{id}', [KitchenDashboardController::class, 'deleteIngredient'])->name('ingredient.delete');
 
     // Settings
     Route::get('/settings', [KitchenDashboardController::class, 'settings'])->name('settings');
 });
 
-<<<<<<< HEAD
 Route::middleware(['auth'])->group(function () {
     Route::prefix('kitchen')->group(function () {
         Route::get('/', [KitchenDashboardController::class, 'index'])->name('kitchen.index');
@@ -162,11 +148,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('kitchen.reports');
         Route::post('/waste-entry', [KitchenDashboardController::class, 'storeWasteEntry'])->name('kitchen.waste-entry.store');
     });
-=======
-// Student Reports Routes
-Route::middleware(['auth', 'student'])->group(function () {
-    Route::get('/student/reports', [StudentReportController::class, 'index'])->name('student.reports');
-    Route::put('/student/reports/{report}', [StudentReportController::class, 'update'])->name('student.reports.update');
-    Route::delete('/student/reports/{report}', [StudentReportController::class, 'destroy'])->name('student.reports.destroy');
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
+
+    // Student Reports Routes
+    Route::middleware(['auth', 'student'])->group(function () {
+        Route::get('/student/reports', [StudentReportController::class, 'index'])->name('student.reports');
+        Route::put('/student/reports/{report}', [StudentReportController::class, 'update'])->name('student.reports.update');
+        Route::delete('/student/reports/{report}', [StudentReportController::class, 'destroy'])->name('student.reports.destroy');
+    });
 });

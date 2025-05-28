@@ -7,13 +7,6 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
-<<<<<<< HEAD
-        <button>
-            <a href="{{ route('kitchen.reports_form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-download fa-sm text-white-50"></i>Submit Report
-            </a>
-        </button>
-=======
         <div>
 
         
@@ -26,7 +19,6 @@
             
 
         </div>
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     </div>
 
     <div class="row">
@@ -100,10 +92,8 @@
                                         </div>
                                     </td>
                                 </tr>
-<<<<<<< HEAD
                                 @endforeach
                             </tbody>
-=======
                                 <tr>
                                     <td>Meat</td>
                                     <td>20</td>
@@ -148,7 +138,6 @@
                                     <th>Trend</th>
                                 </tr>
                             </thead>
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
                         </table>
                     </div>
                 </div>
@@ -159,7 +148,6 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<<<<<<< HEAD
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('monthlyOverviewChart');
@@ -304,9 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnMonth) btnMonth.addEventListener('click', () => updateChart('month'));
 });
 </script>
-=======
 <script src="{{ asset('js/kitchen/reports.js') }}"></script>
 
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 @endpush
 @endsection

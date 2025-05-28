@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Kitchen;
 
 use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
 use App\Models\Recipe;
 use App\Models\ReportReason;
 use App\Models\WasteEntry;
-=======
-use App\Models\Recipe;
 use App\Models\Ingredient;
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 
 class KitchenDashboardController extends BaseDashboardController
 {
@@ -77,7 +73,6 @@ class KitchenDashboardController extends BaseDashboardController
     // Recipe & Meal
     public function mealPlanning()
     {
-<<<<<<< HEAD
         try {
             $recipes = Recipe::all();
             
@@ -97,69 +92,29 @@ class KitchenDashboardController extends BaseDashboardController
                     $groupedRecipes[$week][$day] = [];
                 }
                 
-                $groupedRecipes[$week][$day][$type] =[
-                     'name' => $name,
+                $groupedRecipes[$week][$day][$type] = [
+                    'name' => $name,
                     'status' => $status,
                 ];
             }
             
-            return view('kitchen.meal-planning', ['recipes' => $groupedRecipes]);
+            $recipesJson = json_encode($recipes);
+            $weekMenusJson = json_encode($groupedRecipes);
+            
+            return view('kitchen.meal-planning', [
+                'recipesJson' => $recipesJson,
+                'weekMenusJson' => $weekMenusJson,
+                'recipes' => $groupedRecipes
+            ]);
         } catch (\Exception $e) {
             \Log::error('Error in mealPlanning: ' . $e->getMessage());
-            return view('kitchen.meal-planning', ['recipes' => []]);
+            return view('kitchen.meal-planning', [
+                'recipesJson' => json_encode([]),
+                'weekMenusJson' => json_encode([]),
+                'recipes' => []
+            ]);
         }
-=======
-
-            $all = Recipe::all();
-
-
-            $recipes = $all
-      ->mapWithKeys(fn($r) => [
-         $r->recipe_name => [
-           'week' => $r->recipe_week,
-           'day'  => $r->recipe_day,
-           'type' => $r->recipe_type
-         ]
-      ]);
-
-        $grouped = $all->groupBy('recipe_week');
-
-      $weekMenus = [
-        1 => $grouped->get('Week 1 & 3')
-              ->groupBy('recipe_day')
-              ->map(fn($dayGroup) => [
-                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
-              ])
-              ->values(), 
-
-        2 => $grouped->get('Week 2 & 4')
-              ->groupBy('recipe_day')
-              ->map(fn($dayGroup) => [
-                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
-                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
-              ])
-              ->values(),
-      ];
-
-
-      $recipesJson = json_encode($recipes); 
-      $weekMenusJson = json_encode($weekMenus); 
-  
-
-      return view('kitchen.meal-planning', [
-        'recipesJson'  => $recipesJson,
-        'weekMenusJson'=> $weekMenusJson,
-      ]);
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     }
-
-
-
 
     public function preparation()
     {
@@ -176,10 +131,10 @@ class KitchenDashboardController extends BaseDashboardController
 
     public function inventoryDashboard()
     {
-        return view('kitchen.inventory.dashboard');
+        return $this->generateInventory();
     }
         
-    public function inventory()
+    public function generateInventory()
     {
         $ingredients = Ingredient::all()->map(function ($ingredient) {
             if ($ingredient->ingredient_quantity < 10) {
@@ -198,29 +153,22 @@ class KitchenDashboardController extends BaseDashboardController
 
         $totalIngredients = $ingredients->count();
 
-        return view('kitchen.inventory.dashboard', compact('ingredients', 'lowStockCount', 'totalIngredients'));
+        return view('kitchen.inventory', compact('ingredients', 'lowStockCount', 'totalIngredients'));
     }
 
-<<<<<<< HEAD
-
-    public function generateInventory()
+    public function viewIngredient($id)
     {
-        
-
-        return view('kitchen.inventory.generate');
-=======
-        public function viewIngredient($id){
-
         $ingredient = Ingredient::findOrFail($id);
         return view('kitchen.viewIngredient', compact('ingredient'));
-        }
+    }
 
-        public function updateIngredient(Request $request, $id)
-        {
-            $ingredient = Ingredient::findOrFail($id);
-            $ingredient->update($request->all());
-            return redirect()->route('kitchen.updateIngredient')->with('success', 'Ingredient updated successfully.');
-        }
+    public function updateIngredient(Request $request, $id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->update($request->all());
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient updated successfully.');
+    }
+
     public function storeIngredient(Request $request)
     {
         $request->validate([
@@ -232,15 +180,14 @@ class KitchenDashboardController extends BaseDashboardController
         ]);
 
         Ingredient::create($request->all());
-        return redirect()->route('kitchen.inventory.dashboard')->with('success', 'Ingredient added successfully.');
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient added successfully.');
     }
 
     public function deleteIngredient($id)
     {
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->delete();
-        return redirect()->route('kitchen.deleteIngredient')->with('success', 'Ingredient deleted successfully.');
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient deleted successfully.');
     }
 
 
@@ -255,9 +202,7 @@ class KitchenDashboardController extends BaseDashboardController
 
 
 
-<<<<<<< HEAD
     //Kitchen Suppliers Management
-=======
 
 
 
@@ -268,7 +213,6 @@ class KitchenDashboardController extends BaseDashboardController
 
 
 
->>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     public function suppliers()
     {
         return view('kitchen.suppliers');
