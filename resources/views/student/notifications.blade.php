@@ -1,127 +1,210 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="notifications-container">
+    <div class="notifications-card">
+        <div class="notifications-header">
+            <h2>Alerts & Notifications</h2>
+            <label class="toggle">
+                <input type="checkbox" id="notifToggle" checked>
+                <span class="toggle-label">Meal Plan Updates</span>
+            </label>
+        </div>
+
+        <div class="notifications-list">
+            <div class="notification-item alert">
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span class="icon">⚠️</span>
+                        Ingredient Alert
+                    </div>
+                    <div class="notification-text">
+                        Today's meal contains [ingredient]. Make sure it's safe for you.
+                    </div>
+                </div>
+                <div class="notification-time">2 mins ago</div>
+            </div>
+
+            <div class="notification-item update">
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span class="icon">📅</span>
+                        Schedule Update
+                    </div>
+                    <div class="notification-text">
+                        Meal schedule updated! Check the new weekly plan.
+                    </div>
+                </div>
+                <div class="notification-time">1 hour ago</div>
+            </div>
+
+            <div class="notification-item feedback">
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span class="icon">💬</span>
+                        Feedback
+                    </div>
+                    <div class="notification-text">
+                        How was your meal today? Share your thoughts!
+                    </div>
+                </div>
+                <div class="notification-time">Yesterday</div>
+            </div>
+        </div>
+
+        <div class="notifications-actions">
+            <button class="btn secondary">Mark all as read</button>
+            <button class="btn danger">Clear all</button>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('styles')
 <style>
-/* General Card Enhancements */
-.card {
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.notifications-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/* Header Styling */
-.card-header {
-    background: #007bff;
+.notifications-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.notifications-header {
+    background: #2c3e50;
     color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* List Group Item */
-.list-group-item {
-    border: none;
+.notifications-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 12px;
+    transition: background 0.3s;
+}
+
+.toggle-label:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.toggle input:checked + .toggle-label {
+    background: #27ae60;
+}
+
+.toggle input:checked + .toggle-label:after {
+    transform: translateX(26px);
+}
+
+.notifications-list {
+    padding: 20px;
+}
+
+.notification-item {
+    padding: 15px;
     border-bottom: 1px solid #eee;
-    padding: 15px 10px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
-}
-.list-group-item:hover {
-    background-color: #eef6ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: background-color 0.2s;
 }
 
-/* Alert Types */
-.list-group-item .fw-bold {
-    font-size: 1rem;
-}
-.text-danger i {
-    color: #dc3545;
-}
-.text-primary i {
-    color: #007bff;
-}
-.text-success i {
-    color: #28a745;
+.notification-item:hover {
+    background: #f8f9fa;
 }
 
-/* Action Buttons */
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification-text {
+    color: #666;
+}
+
+.notification-time {
+    color: #999;
+    font-size: 0.9em;
+}
+
+.notifications-actions {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 .btn {
-    transition: 0.2s ease-in-out;
-}
-.btn:hover {
-    transform: scale(1.03);
-}
-
-/* Toggle Switch Styling */
-.form-check-input:checked {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-.form-check-label {
-    margin-left: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: 500;
-    color: #fff;
+    transition: background-color 0.2s;
 }
+
+.btn.secondary {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.btn.secondary:hover {
+    background: #e0e0e0;
+}
+
+.btn.danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn.danger:hover {
+    background: #c0392b;
+}
+
+.alert .notification-title { color: #e74c3c; }
+.update .notification-title { color: #3498db; }
+.feedback .notification-title { color: #2ecc71; }
 </style>
-
-<!-- Include Bootstrap Icons (optional) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <span>Alerts & Notifications</span>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="notifToggle" checked>
-                        <label class="form-check-label" for="notifToggle">Meal Plan Updates</label>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    {{-- Notification Items --}}
-                    <div class="list-group mb-3">
-                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold text-danger">
-                                    <i class="bi bi-exclamation-circle-fill"></i> Ingredient Alert
-                                </div>
-                                Today's meal contains [ingredient]. Make sure it's safe for you.
-                            </div>
-                            <small class="text-muted">2 mins ago</small>
-                        </div>
-
-                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold text-primary">
-                                    <i class="bi bi-calendar-event"></i> Schedule Update
-                                </div>
-                                Meal schedule updated! Check the new weekly plan.
-                            </div>
-                            <small class="text-muted">1 hour ago</small>
-                        </div>
-
-                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold text-success">
-                                    <i class="bi bi-chat-dots"></i> Feedback
-                                </div>
-                                How was your meal today? Share your thoughts!
-                            </div>
-                            <small class="text-muted">Yesterday</small>
-                        </div>
-                    </div>
-
-                    {{-- Action Buttons --}}
-                    <div class="d-flex justify-content-end gap-2">
-                        <button class="btn btn-outline-secondary btn-sm">Mark all as read</button>
-                        <button class="btn btn-outline-danger btn-sm">Clear all</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+@endpush
