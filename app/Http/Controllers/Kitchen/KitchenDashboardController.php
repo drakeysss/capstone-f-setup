@@ -86,6 +86,13 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Inventory Management
+
+
+    public function inventoryDashboard()
+    {
+        return view('kitchen.inventory.dashboard');
+    }
+        
     public function inventory()
     {
         $ingredients = Ingredient::all()->map(function ($ingredient) {
@@ -105,8 +112,7 @@ class KitchenDashboardController extends BaseDashboardController
 
         $totalIngredients = $ingredients->count();
 
-            
-        return view('kitchen.inventory', compact('ingredients', 'lowStockCount', 'totalIngredients'));
+        return view('kitchen.inventory.dashboard', compact('ingredients', 'lowStockCount', 'totalIngredients'));
     }
 
         public function viewIngredient($id){
@@ -119,7 +125,7 @@ class KitchenDashboardController extends BaseDashboardController
         {
             $ingredient = Ingredient::findOrFail($id);
             $ingredient->update($request->all());
-            return redirect()->route('kitchen.inventory')->with('success', 'Ingredient updated successfully.');
+            return redirect()->route('kitchen.updateIngredient')->with('success', 'Ingredient updated successfully.');
         }
     public function storeIngredient(Request $request)
     {
@@ -132,14 +138,14 @@ class KitchenDashboardController extends BaseDashboardController
         ]);
 
         Ingredient::create($request->all());
-        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient added successfully.');
+        return redirect()->route('kitchen.inventory.dashboard')->with('success', 'Ingredient added successfully.');
     }
 
     public function deleteIngredient($id)
     {
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->delete();
-        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient deleted successfully.');
+        return redirect()->route('kitchen.deleteIngredient')->with('success', 'Ingredient deleted successfully.');
     }
 
 

@@ -93,19 +93,19 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>                                    
-                                    @foreach ($ingredients as $ingredient)
-                                        @php
-                                            if($ingredient->ingredient_quantity < 10) {
-                                                $status = 'low stock';
-                                            } elseif($ingredient->ingredient_quantity == 0) {
-                                                $status = 'out of stock';
-                                            } else {
-                                                $status = 'in stock';
-                                            }
+                            <tbody>
+                                @foreach ($ingredients as $ingredient)
+                                @php
+                                if($ingredient->ingredient_quantity < 10) {
+                                    $status='low stock' ;
+                                    } elseif($ingredient->ingredient_quantity == 0) {
+                                    $status = 'out of stock';
+                                    } else {
+                                    $status = 'in stock';
+                                    }
 
-                                        @endphp
-                                        <tr class="searchable-item filterable-item" data-status="{{ $ingredient->data_status }}">
+                                    @endphp
+                                    <tr class="searchable-item filterable-item" data-status="{{ $ingredient->data_status }}">
                                         <td>{{ $ingredient->ingredient_name }}</td>
                                         <td>{{ $ingredient->ingredient_category }}</td>
                                         <td>{{ $ingredient->ingredient_quantity }}</td>
@@ -114,32 +114,28 @@
                                         <td>
                                             @if($ingredient->ingredient_quantity < 10)
                                                 <span class="badge bg-warning">Low Stock</span>
-                                            @elseif($ingredient->ingredient_quantity == 0)
+                                                @elseif($ingredient->ingredient_quantity == 0)
                                                 <span class="badge bg-danger">Out of Stock</span>
-                                            @else
+                                                @else
                                                 <span class="badge bg-success">In Stock</span>
-                                            @endif
+                                                @endif
                                         <td>
-                                            <button class="btn btn-sm btn-info">
-                                                <i class="bi bi-eye">
-                                                    <a href="{{ route('kitchen.inventory.show', ['item' => $ingredient->id]) }}"></a>
-                                                </i>
-                                            </button>
-                                            <button class="btn btn-sm btn-warning">
-                                                <i class="bi bi-pencil">
-                                                    <a href="{{ route('kitchen.inventory.update', ['item' => $ingredient->id]) }}"></a>
-                                                </i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash">
-                                                    <a href="{{ route('kitchen.inventory.delete', ['item' => $ingredient->id]) }}"></a>
-                                                </i>
-                                            </button>
+                                            
+                                            <a href="{{ route('kitchen.inventory.show', $ingredient->id) }}" class="btn btn-sm btn-info">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('kitchen.inventory.update', $ingredient->id) }}" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="{{ route('kitchen.inventory.delete', $ingredient->id) }}" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tr>
-                                
+                                    </tr>
+
                             </tbody>
                         </table>
                     </div>

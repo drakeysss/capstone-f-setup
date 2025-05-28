@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Cook\CookDashboardController;
@@ -82,6 +81,11 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::post('/suppliers/purchase-order', [SupplierController::class, 'createPurchaseOrder'])->name('suppliers.purchase-order');
 });
 
+
+
+
+
+
 // Kitchen Routes
 Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')->group(function () {
     // Dashboard & Overview
@@ -105,10 +109,12 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
 
     // Inventory Management
     Route::get('/inventory', [KitchenDashboardController::class, 'inventory'])->name('inventory');
-    Route::get('/inventory/{item}', [KitchenDashboardController::class, 'viewIngredient'])->name('inventory.show');
+    Route::get('/inventory/dashboard', [KitchenDashboardController::class, 'inventoryDashboard'])->name('inventory.dashboard');
+
+    Route::get('/inventory/{id}', [KitchenDashboardController::class, 'viewIngredient'])->name('inventory.show');
     Route::post('/inventory', [KitchenDashboardController::class, 'storeIngredient'])->name('inventory.store');
-    Route::put('/inventory/{item}', [KitchenDashboardController::class, 'updateIngredient'])->name('inventory.update');
-    Route::delete('/inventory/{item}', [KitchenDashboardController::class, 'destroyIngredient'])->name('inventory.delete');
+    Route::put('/inventory/{id}', [KitchenDashboardController::class, 'updateIngredient'])->name('inventory.update');
+    Route::delete('/inventory/{id}', [KitchenDashboardController::class, 'destroyIngredient'])->name('inventory.delete');
 
     // Settings
     Route::get('/settings', [KitchenDashboardController::class, 'settings'])->name('settings');
