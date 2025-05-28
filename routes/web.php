@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
 
     // Inventory Management
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
+    Route::get('/inventory/{item}', [InventoryController::class, 'viewIngredient'])->name('inventory.show');
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
     Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.delete');
@@ -101,6 +102,10 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
 
     // Inventory Management
     Route::get('/inventory', [KitchenDashboardController::class, 'inventory'])->name('inventory');
+    Route::get('/inventory/{item}', [KitchenDashboardController::class, 'viewIngredient'])->name('inventory.show');
+    Route::post('/inventory', [KitchenDashboardController::class, 'storeIngredient'])->name('inventory.store');
+    Route::put('/inventory/{item}', [KitchenDashboardController::class, 'updateIngredient'])->name('inventory.update');
+    Route::delete('/inventory/{item}', [KitchenDashboardController::class, 'destroyIngredient'])->name('inventory.delete');
 
     // Settings
     Route::get('/settings', [KitchenDashboardController::class, 'settings'])->name('settings');

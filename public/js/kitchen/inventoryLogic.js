@@ -20,10 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 //Filter Logic
-// Filter Logic for Dropdown Menu
 
 document.addEventListener('DOMContentLoaded', function () {
-    const filterDropdown = document.querySelector('#filterLogic'); // Target the dropdown container
+    const filterDropdown = document.querySelector('#filterLogic'); 
 
     if (!filterDropdown) {
         console.warn('Filter dropdown not found!');
@@ -33,20 +32,23 @@ document.addEventListener('DOMContentLoaded', function () {
     filterDropdown.addEventListener('click', function (event) {
         const target = event.target;
 
-        // Check if the clicked element is a dropdown item
-        if (target.classList.contains('dropdown-item')) {
-            const selectedFilter = target.getAttribute('data-value').toLowerCase(); // Get the data-value attribute
 
-            // Filter the table rows based on the selected filter
+        if (target.classList.contains('dropdown-item')) {
+            const selectedFilter = target.getAttribute('data-value').toLowerCase(); 
+
+
             document.querySelectorAll('.filterable-item').forEach(item => {
                 const itemStatus = item.getAttribute('data-status').toLowerCase();
 
                 if (selectedFilter === 'all') {
-                    item.style.display = ''; // Show all items
+                    item.style.display = '';
                 } else {
-                    item.style.display = itemStatus.includes(selectedFilter) ? '' : 'none'; // Filter items
+                    item.style.display = itemStatus.includes(selectedFilter) ? '' : 'none'; 
                 }
             });
         }
     });
 });
+
+
+

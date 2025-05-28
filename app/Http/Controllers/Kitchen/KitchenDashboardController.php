@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kitchen;
 use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use App\Models\Ingredient;
 
 class KitchenDashboardController extends BaseDashboardController
 {
@@ -71,10 +72,8 @@ class KitchenDashboardController extends BaseDashboardController
       ]);
     }
 
-    public function recipes()
-    {
-        return view('kitchen.recipes');
-    }
+
+
 
     public function preparation()
     {
@@ -89,8 +88,81 @@ class KitchenDashboardController extends BaseDashboardController
     // Inventory Management
     public function inventory()
     {
-        return view('kitchen.inventory');
+        $ingredients = Ingredient::all()->map(function ($ingredient) {
+            if ($ingredient->ingredient_quantity < 10) {
+                $ingredient->data_status = 'low stock';
+            } elseif ($ingredient->ingredient_quantity == 0) {
+                $ingredient->data_status = 'out of stock';
+            } else {
+                $ingredient->data_status = 'in stock';
+            }
+            return $ingredient;
+        });
+
+        $lowStockCount = $ingredients->filter(function ($ingredient) {
+            return $ingredient->ingredient_quantity < 10;
+        })->count();
+
+        $totalIngredients = $ingredients->count();
+
+            
+        return view('kitchen.inventory', compact('ingredients', 'lowStockCount', 'totalIngredients'));
     }
+
+        public function viewIngredient($id){
+
+        $ingredient = Ingredient::findOrFail($id);
+        return view('kitchen.viewIngredient', compact('ingredient'));
+        }
+
+        public function updateIngredient(Request $request, $id)
+        {
+            $ingredient = Ingredient::findOrFail($id);
+            $ingredient->update($request->all());
+            return redirect()->route('kitchen.inventory')->with('success', 'Ingredient updated successfully.');
+        }
+    public function storeIngredient(Request $request)
+    {
+        $request->validate([
+            'ingredient_name' => 'required|string|max:255',
+            'ingredient_category' => 'nullable|string|max:255',
+            'ingredient_unit' => 'nullable|string|max:50',
+            'ingredient_price' => 'nullable|numeric',
+            'ingredient_quantity' => 'nullable|integer',
+        ]);
+
+        Ingredient::create($request->all());
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient added successfully.');
+    }
+
+    public function deleteIngredient($id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->delete();
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient deleted successfully.');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function suppliers()
     {

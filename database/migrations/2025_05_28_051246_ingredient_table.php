@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id('ingredient_id');
             $table->string('ingredient_name');
-            $table->string('ingredient_unit')->nullable();
+            $table->enum('ingredient_category', ['Meat', 'Vegetables', 'Fruits', 'Dairy', 'Grains', 'Condiments'])->nullable();
+            $table->enum('ingredient_unit', ['kg', 'g', 'pcs', 'liters', 'ml'])->nullable();
             $table->decimal('ingredient_price', 8, 2)->nullable();
             $table->unsignedInteger('ingredient_quantity')->nullable();
             $table->timestamps();
