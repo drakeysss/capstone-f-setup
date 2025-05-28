@@ -1,136 +1,145 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Weekly Menu and Ingredients</h5>
-                    <button class="btn btn-primary" id="toggleEditMode" type="button">
-                        <i class="fas fa-edit"></i> Toggle Edit Mode
-                    </button>
-                </div>
-                <div class="card-body">
-                    <ul class="nav nav-tabs" id="menuTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="week1-tab" data-bs-toggle="tab" data-bs-target="#week1" type="button" role="tab">Week 1 & 3</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="week2-tab" data-bs-toggle="tab" data-bs-target="#week2" type="button" role="tab">Week 2 & 4</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content mt-3" id="menuTabContent">
-                        <div class="tab-pane fade show active" id="week1" role="tabpanel">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Day</th>
-                                            <th>Breakfast</th>
-                                            <th>Lunch</th>
-                                            <th>Dinner</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                                        <tr>
-                                            <td class="align-middle">{{ $day }}</td>
-                                            @foreach(['Breakfast', 'Lunch', 'Dinner'] as $mealType)
-                                            <td>
-                                                <div class="menu-container">
-                                                    <div class="menu-item">
-                                                        <div class="menu-section text-center mb-2">
-                                                            <span class="menu-title d-block mb-2" style="font-weight: bold;">Menu Item</span>
-                                                            <input type="text" class="form-control form-control-sm edit-menu-input d-none mx-auto" style="max-width: 200px; text-align: center; font-weight: bold;">
-                                                        </div>
-                                                        <div class="ingredients-section mt-2">
-                                                            <div class="ingredients-header mb-1">
-                                                                <small class="text-muted">Ingredients:</small>
-                                                            </div>
-                                                            <div class="ingredients-content">
-                                                                <ul class="ingredients-list" style="padding-left: 20px;">
-                                                                </ul>
-                                                                <textarea class="form-control form-control-sm edit-ingredients-input d-none" rows="3" style="max-width: 100%; margin: 0 auto;"></textarea>
-                                                            </div>
-                                                        </div>
+<div class="cook-container">
+    <div class="main-card">
+        <div class="card-header">
+            <h5 class="card-title">Weekly Menu and Ingredients</h5>
+            <button class="btn btn-primary" id="toggleEditMode" type="button">
+                <i class="fas fa-edit"></i> Toggle Edit Mode
+            </button>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="menuTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="week1-tab" data-bs-toggle="tab" data-bs-target="#week1" type="button" role="tab">Week 1 & 3</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="week2-tab" data-bs-toggle="tab" data-bs-target="#week2" type="button" role="tab">Week 2 & 4</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="menuTabContent">
+                <div class="tab-pane fade show active" id="week1" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Breakfast</th>
+                                    <th>Lunch</th>
+                                    <th>Dinner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
+                                <tr>
+                                    <td class="align-middle">{{ $day }}</td>
+                                    @foreach(['Breakfast', 'Lunch', 'Dinner'] as $mealType)
+                                    <td>
+                                        <div class="menu-container">
+                                            <div class="menu-item">
+                                                <div class="menu-section text-center mb-2">
+                                                    <span class="menu-title d-block mb-2" style="font-weight: bold;">Menu Item</span>
+                                                    <input type="text" class="form-control form-control-sm edit-menu-input d-none mx-auto" style="max-width: 200px; text-align: center; font-weight: bold;">
+                                                </div>
+                                                <div class="ingredients-section mt-2">
+                                                    <div class="ingredients-header mb-1">
+                                                        <small class="text-muted">Ingredients:</small>
+                                                    </div>
+                                                    <div class="ingredients-content">
+                                                        <ul class="ingredients-list" style="padding-left: 20px;">
+                                                        </ul>
+                                                        <textarea class="form-control form-control-sm edit-ingredients-input d-none" rows="3" style="max-width: 100%; margin: 0 auto;"></textarea>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="week2" role="tabpanel">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Day</th>
-                                            <th>Breakfast</th>
-                                            <th>Lunch</th>
-                                            <th>Dinner</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                                        <tr>
-                                            <td class="align-middle">{{ $day }}</td>
-                                            @foreach(['Breakfast', 'Lunch', 'Dinner'] as $mealType)
-                                            <td>
-                                                <div class="menu-container">
-                                                    <div class="menu-item">
-                                                        <div class="menu-section text-center mb-2">
-                                                            <span class="menu-title d-block mb-2" style="font-weight: bold;">Menu Item</span>
-                                                            <input type="text" class="form-control form-control-sm edit-menu-input d-none mx-auto" style="max-width: 200px; text-align: center; font-weight: bold;">
-                                                        </div>
-                                                        <div class="ingredients-section mt-2">
-                                                            <div class="ingredients-header mb-1">
-                                                                <small class="text-muted">Ingredients:</small>
-                                                            </div>
-                                                            <div class="ingredients-content">
-                                                                <ul class="ingredients-list" style="padding-left: 20px;">
-                                                                </ul>
-                                                                <textarea class="form-control form-control-sm edit-ingredients-input d-none" rows="3" style="max-width: 100%; margin: 0 auto;"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            @endforeach
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @endforeach
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end">
-                    <button class="btn btn-success" id="saveAllBtn" type="button" style="display: none;">
-                        <i class="fas fa-save"></i> Save All Changes
-                    </button>
+                <div class="tab-pane fade" id="week2" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Breakfast</th>
+                                    <th>Lunch</th>
+                                    <th>Dinner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
+                                <tr>
+                                    <td class="align-middle">{{ $day }}</td>
+                                    @foreach(['Breakfast', 'Lunch', 'Dinner'] as $mealType)
+                                    <td>
+                                        <div class="menu-container">
+                                            <div class="menu-item">
+                                                <div class="menu-section text-center mb-2">
+                                                    <span class="menu-title d-block mb-2" style="font-weight: bold;">Menu Item</span>
+                                                    <input type="text" class="form-control form-control-sm edit-menu-input d-none mx-auto" style="max-width: 200px; text-align: center; font-weight: bold;">
+                                                </div>
+                                                <div class="ingredients-section mt-2">
+                                                    <div class="ingredients-header mb-1">
+                                                        <small class="text-muted">Ingredients:</small>
+                                                    </div>
+                                                    <div class="ingredients-content">
+                                                        <ul class="ingredients-list" style="padding-left: 20px;">
+                                                        </ul>
+                                                        <textarea class="form-control form-control-sm edit-ingredients-input d-none" rows="3" style="max-width: 100%; margin: 0 auto;"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @endforeach
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <button class="btn btn-success" id="saveAllBtn" type="button" style="display: none;">
+                <i class="fas fa-save"></i> Save All Changes
+            </button>
         </div>
     </div>
 </div>
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/cook.css') }}">
+@endpush
+
 <style>
 .menu-container {
     padding: 15px;
-    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .menu-section {
     padding: 10px;
-    background-color: #f8f9fa;
     border-radius: 6px;
+    margin-bottom: auto;
+    text-align: center;
 }
 
 .menu-title {
@@ -140,10 +149,10 @@
 }
 
 .ingredients-section {
-    margin-top: 15px;
     padding: 10px;
-    background-color: #f8f9fa;
     border-radius: 6px;
+    margin-top: auto;
+    text-align: left;
 }
 
 .ingredients-header {
@@ -154,6 +163,7 @@
 
 .ingredients-list {
     margin: 0;
+    padding-left: 0;
 }
 
 .ingredients-list ul {
@@ -163,6 +173,7 @@
 .ingredients-list li {
     margin-bottom: 4px;
     color: #6c757d;
+    text-align: left;
 }
 
 .edit-controls {
@@ -190,6 +201,7 @@
 }
 </style>
 
+@push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -380,4 +392,4 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection 
+@endpush 

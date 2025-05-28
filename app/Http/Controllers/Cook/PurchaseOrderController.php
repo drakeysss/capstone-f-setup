@@ -94,11 +94,6 @@ class PurchaseOrderController extends Controller
 
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        if ($purchaseOrder->status !== 'pending') {
-            return redirect()->route('cook.purchase-orders.index')
-                ->with('error', 'Cannot edit a completed or cancelled purchase order');
-        }
-
         $purchaseOrder->load('items');
         return view('cook.purchase-orders.edit', compact('purchaseOrder'));
     }
@@ -206,7 +201,7 @@ class PurchaseOrderController extends Controller
     {
         $purchaseOrders = PurchaseOrder::with('items')
             ->where('status', 'pending')
-            ->orderBy('order_date', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
         return view('cook.purchase-orders.index', compact('purchaseOrders'));
@@ -216,7 +211,7 @@ class PurchaseOrderController extends Controller
     {
         $purchaseOrders = PurchaseOrder::with('items')
             ->where('status', 'completed')
-            ->orderBy('order_date', 'desc')
+            ->orderBy('id', 'asc')
             ->get();
 
         return view('cook.purchase-orders.index', compact('purchaseOrders'));

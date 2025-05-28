@@ -368,16 +368,13 @@
             @endif
 
             <!-- Main Content -->
-<<<<<<< HEAD
             <div class="main-content">
                 <!-- Burger Menu -->
                 <button class="burger-menu d-md-none" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>
                 </button>
 
-=======
             <main class="main-content" style="margin-left:250px; padding-top:60px; min-height:calc(100vh - 70px); margin-top:20px; background:#f8f9fc;">
->>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
                 @if(session('error'))
                     <div class="alert alert-danger mb-4">
                         {{ session('error') }}

@@ -1,4 +1,4 @@
-<!-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid p-4">
@@ -58,9 +58,31 @@
                                                                 </div>
                                                                 <div class="ingredients-content">
                                                                     <ul class="ingredients-list" style="padding-left: 20px;">
-                                                                        @foreach(explode(',', $order->ingredients) as $ingredient)
+                                                                        @php
+                                                                            $ingredients = $order->ingredients;
+                                                                            $ingredientList = [];
+                                                                            
+                                                                            // Try to decode as JSON first
+                                                                            $decodedIngredients = json_decode($ingredients, true);
+                                                                            if (json_last_error() === JSON_ERROR_NONE && is_array($decodedIngredients)) {
+                                                                                $ingredientList = $decodedIngredients;
+                                                                            } else {
+                                                                                // If not JSON, split by newlines first, then by commas
+                                                                                $lines = explode("\n", $ingredients);
+                                                                                foreach ($lines as $line) {
+                                                                                    $parts = explode(',', $line);
+                                                                                    foreach ($parts as $part) {
+                                                                                        $trimmed = trim($part);
+                                                                                        if (!empty($trimmed)) {
+                                                                                            $ingredientList[] = $trimmed;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        @endphp
+                                                                        @foreach($ingredientList as $ingredient)
                                                                             <li class="ingredient-item" style="font-weight: normal;">
-                                                                                <small>{{ trim($ingredient) }}</small>
+                                                                                <small>{{ $ingredient }}</small>
                                                                             </li>
                                                                         @endforeach
                                                                     </ul>
@@ -135,9 +157,31 @@
                                                                 </div>
                                                                 <div class="ingredients-content">
                                                                     <ul class="ingredients-list" style="padding-left: 20px;">
-                                                                        @foreach(explode(',', $order->ingredients) as $ingredient)
+                                                                        @php
+                                                                            $ingredients = $order->ingredients;
+                                                                            $ingredientList = [];
+                                                                            
+                                                                            // Try to decode as JSON first
+                                                                            $decodedIngredients = json_decode($ingredients, true);
+                                                                            if (json_last_error() === JSON_ERROR_NONE && is_array($decodedIngredients)) {
+                                                                                $ingredientList = $decodedIngredients;
+                                                                            } else {
+                                                                                // If not JSON, split by newlines first, then by commas
+                                                                                $lines = explode("\n", $ingredients);
+                                                                                foreach ($lines as $line) {
+                                                                                    $parts = explode(',', $line);
+                                                                                    foreach ($parts as $part) {
+                                                                                        $trimmed = trim($part);
+                                                                                        if (!empty($trimmed)) {
+                                                                                            $ingredientList[] = $trimmed;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        @endphp
+                                                                        @foreach($ingredientList as $ingredient)
                                                                             <li class="ingredient-item" style="font-weight: normal;">
-                                                                                <small>{{ trim($ingredient) }}</small>
+                                                                                <small>{{ $ingredient }}</small>
                                                                             </li>
                                                                         @endforeach
                                                                     </ul>
@@ -220,7 +264,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const ingredientsValue = menuItem.querySelector('.edit-ingredients-input')?.value;
             const data = {};
             if (menuValue !== undefined) data.menu_item = menuValue;
-            if (ingredientsValue !== undefined) data.ingredients = ingredientsValue;
+            
+            // Split ingredients by comma, trim whitespace, filter out empty entries, and format as JSON array string
+            if (ingredientsValue !== undefined) {
+                // Save ingredients as a simple list
+                const ingredients = ingredientsValue
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && !line.toLowerCase().includes('ingredients:'))
+                    .join('\n');
+                data.ingredients = ingredients;
+            }
+
             fetch(`/cook/weekly-menu-orders/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -239,9 +294,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     if (ingredientsValue !== undefined) {
                         const ingredientsList = menuItem.querySelector('.ingredients-list');
-                        ingredientsList.innerHTML = ingredientsValue.split(',').map(ingredient => 
-                            `<li class=\"ingredient-item\"><small>${ingredient.trim()}</small></li>`
+                        const ingredients = ingredientsValue
+                            .split('\n')
+                            .map(line => line.trim())
+                            .filter(line => line.length > 0 && !line.toLowerCase().includes('ingredients:'));
+                        
+                        ingredientsList.innerHTML = ingredients.map(ingredient => 
+                            `<li class=\"ingredient-item\"><small>${ingredient}</small></li>`
                         ).join('');
+                        
                         ingredientsList.classList.remove('d-none');
                         menuItem.querySelector('.edit-ingredients-input').classList.add('d-none');
                         if(menuItem.querySelector('.edit-ingredients-btn')) menuItem.querySelector('.edit-ingredients-btn').classList.remove('d-none');
@@ -249,7 +310,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.classList.add('d-none');
                     menuItem.querySelector('.cancel-btn').classList.add('d-none');
                     menuItem.querySelector('.edit-btn').classList.remove('d-none');
+                    console.log('Menu item updated successfully!');
+                } else {
+                    console.error('Error saving menu item:', data.error);
                 }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
             });
         });
     });
@@ -270,4 +337,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
-@endsection  -->
+@endsection 

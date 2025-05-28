@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cook;
 use App\Http\Controllers\Controller;
 use App\Models\WeeklyMenuOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WeeklyMenuOrderController extends Controller
 {
@@ -30,18 +31,26 @@ class WeeklyMenuOrderController extends Controller
 
     public function update(Request $request, WeeklyMenuOrder $weeklyMenuOrder)
     {
-        if (!$weeklyMenuOrder->is_editable) {
-            return response()->json(['error' => 'This menu item is not editable'], 403);
-        }
-
-        $validated = $request->validate([
+        $request->validate([
             'menu_item' => 'required|string|max:255',
-            'ingredients' => 'nullable|string'
+            'ingredients' => 'required|string'
         ]);
 
-        $weeklyMenuOrder->update($validated);
+        $weeklyMenuOrder->update([
+            'menu_item' => $request->menu_item,
+            'ingredients' => $request->ingredients
+        ]);
 
-        return response()->json(['success' => true, 'message' => 'Menu item updated successfully']);
+        Log::info('Weekly menu updated', [
+            'id' => $weeklyMenuOrder->id,
+            'menu_item' => $weeklyMenuOrder->menu_item,
+            'ingredients' => $weeklyMenuOrder->ingredients
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Menu updated successfully'
+        ]);
     }
 
     public function toggleEditability(WeeklyMenuOrder $weeklyMenuOrder)

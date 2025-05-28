@@ -26,26 +26,18 @@ class CookDashboardController extends BaseDashboardController
         $completedOrders = Order::where('status', 'completed')->count() + 
                           PurchaseOrder::where('status', 'completed')->count();
 
-        // Get menu statistics
-        $activeMenuItems = Menu::where('is_available', true)->count();
-        $totalMenuItems = Menu::count();
+        // Get current day and week
+        $currentDay = now()->format('l'); // Gets current day name (Monday, Tuesday, etc.)
         
-        // Get weekly menu for Week 1 & 3 Saturday
-        $weeklyMenu = WeeklyMenuOrder::where('week', 'Week 1 & 3')
-            ->where('day', 'Saturday')
+        // Calculate week type based on the actual week of the month
+        $dayOfMonth = now()->day;
+        $weekOfMonth = ceil($dayOfMonth / 7);
+        $weekType = ($weekOfMonth % 2 == 0) ? 'Week 2 & 4' : 'Week 1 & 3';
+        
+        // Get weekly menu for current day
+        $weeklyMenu = WeeklyMenuOrder::where('week', $weekType)
+            ->where('day', $currentDay)
             ->orderBy('meal_type')
-            ->get();
-
-        // Get menu items
-        $menuItems = Menu::where('is_available', true)
-            ->orderBy('created_at', 'desc')
-            ->take(3)
-            ->get();
-
-        // Get supplier statistics
-        $activeSuppliers = Supplier::count();
-        $recentSuppliers = Supplier::orderBy('created_at', 'desc')
-            ->take(3)
             ->get();
 
         // Get the most recent completed purchase order
@@ -66,16 +58,13 @@ class CookDashboardController extends BaseDashboardController
         return compact(
             'pendingOrders',
             'completedOrders',
-            'activeMenuItems',
-            'totalMenuItems',
-            'menuItems',
             'weeklyMenu',
-            'activeSuppliers',
-            'recentSuppliers',
             'recentOrders',
             'lowStockItems',
             'totalItems',
-            'lowStockItemsList'
+            'lowStockItemsList',
+            'currentDay',
+            'weekType'
         );
     }
 

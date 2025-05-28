@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-<<<<<<< HEAD
             UsersTableSeeder::class,
-            RecipeTableSeeders::class,
+            WeeklyMenuOrderSeeder::class,
+            ReportSeeder::class
         ]);
 
         // Create Admin User
@@ -80,9 +80,5 @@ class DatabaseSeeder extends Seeder
                 'role' => 'student',
             ]);
         }
-=======
-            UsersTableSeeder::class
-        ]);
->>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
     }
 }

@@ -94,10 +94,10 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::get('/purchase-orders/create', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
     Route::post('/purchase-orders', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     Route::get('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+    Route::put('/purchase-orders/{purchaseOrder}/status', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'updateStatus'])->name('purchase-orders.update-status');
+    Route::delete('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
     Route::get('/purchase-orders/{purchaseOrder}/edit', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
     Route::put('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
-    Route::delete('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
-    Route::put('/purchase-orders/{purchaseOrder}/status', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'updateStatus'])->name('purchase-orders.status');
 
     // Weekly Menu Orders
     Route::get('/weekly-menu-orders', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'index'])->name('cook.weekly-menu-orders.index');

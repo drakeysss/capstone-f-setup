@@ -1,122 +1,112 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h3 mb-0 text-gray-800">Edit Purchase Order #{{ $purchaseOrder->id }}</h2>
-        <a href="{{ route('cook.purchase-orders.index') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Back to List
-        </a>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <form id="purchaseOrderForm" action="{{ route('cook.purchase-orders.update', $purchaseOrder) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="order_date">Order Date</label>
-                            <input type="datetime-local" class="form-control" id="order_date" name="order_date" 
-                                   value="{{ $purchaseOrder->order_date->format('Y-m-d\TH:i') }}" required>
-                        </div>
+<div class="full-page-form">
+    <div class="form-header">
+            <h2 class="h3 mb-0 text-gray-800">Edit Purchase Order #{{ $purchaseOrder->id }}</h2>
+            <a href="{{ route('cook.purchase-orders.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    <div class="form-body">
+        <form id="purchaseOrderForm" action="{{ route('cook.purchase-orders.update', $purchaseOrder) }}" method="POST" style="width:100%;">
+            @csrf
+            @method('PUT')
+            <div class="row mb-4" style="margin-left:0;">
+                <div class="col-md-6" style="padding-left:0;">
+                    <div class="form-group">
+                        <label for="order_date">Order Date</label>
+                        <input type="datetime-local" class="form-control" id="order_date" name="order_date" value="{{ $purchaseOrder->order_date->format('Y-m-d\TH:i') }}" required>
                     </div>
                 </div>
-
-                <div class="table-responsive mb-4">
-                    <table class="table table-bordered" id="itemsTable">
-                        <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Quantity</th>
-                                <th>Unit</th>
-                                <th>Price</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($purchaseOrder->items as $index => $item)
-                            <tr>
-                                <td>
-                                    <input type="text" class="form-control" name="items[{{ $index }}][name]" 
-                                           value="{{ $item->name }}" required>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control quantity" name="items[{{ $index }}][quantity]" 
-                                           value="{{ $item->quantity }}" min="1" step="0.01" required>
-                                </td>
-                                <td>
-                                    <select class="form-control unit" name="items[{{ $index }}][unit]" required>
-                                        <option value="kilograms" {{ $item->unit === 'kilograms' ? 'selected' : '' }}>Kilograms</option>
-                                        <option value="pieces" {{ $item->unit === 'pieces' ? 'selected' : '' }}>Pieces</option>
-                                        <option value="liter" {{ $item->unit === 'liter' ? 'selected' : '' }}>Liter</option>
-                                        <option value="grams" {{ $item->unit === 'grams' ? 'selected' : '' }}>Grams</option>
-                                        <option value="packs" {{ $item->unit === 'packs' ? 'selected' : '' }}>Packs</option>
-                                        <option value="gallons" {{ $item->unit === 'gallons' ? 'selected' : '' }}>Gallons</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control price" name="items[{{ $index }}][price]" 
-                                           value="{{ $item->price }}" min="0" step="0.01" required>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control total" readonly 
-                                           value="{{ number_format($item->quantity * $item->price, 2) }}">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm remove-row">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6">
-                                    <button type="button" class="btn btn-success btn-sm" id="addRow">
-                                        <i class="bi bi-plus-lg"></i> Add Item
-                                    </button>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 offset-md-6">
-                        <div class="form-group">
-                            <label for="total_cost">Total Cost</label>
-                            <input type="text" class="form-control" id="total_cost" name="total_cost" 
-                                   value="{{ number_format($purchaseOrder->total_cost, 2) }}" readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-right mt-4">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-save"></i> Update Purchase Order
+            </div>
+            <div class="table-responsive" style="margin-left:0;">
+                <table class="table table-bordered mb-0" id="itemsTable" style="width:100%;margin-bottom:0;">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($purchaseOrder->items as $index => $item)
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" name="items[{{ $index }}][name]" value="{{ $item->name }}" required>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control quantity" name="items[{{ $index }}][quantity]" value="{{ $item->quantity }}" min="1" step="0.01" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="items[{{ $index }}][unit]" value="{{ $item->unit }}" required>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control price" name="items[{{ $index }}][price]" value="{{ $item->price }}" min="0.01" step="0.01" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control total" value="{{ number_format($item->quantity * $item->price, 2) }}" readonly>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm remove-row">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="row mb-4" style="margin-left:0;">
+                <div class="col-md-6" style="padding-left:0;">
+                    <button type="button" class="btn btn-success" id="addRow">
+                        <i class="fas fa-plus"></i> Add Item
                     </button>
                 </div>
-            </form>
-        </div>
+                <div class="col-md-6 text-end">
+                    <h5>Total Cost: <span id="total_cost">{{ number_format($purchaseOrder->total_cost, 2) }}</span></h5>
+                </div>
+            </div>
+            <div class="mt-4" style="margin-left:0;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
 
 @push('styles')
 <style>
-    .form-control:read-only {
-        background-color: #f8f9fc;
+.full-page-form {
+    width: 100%;
+    max-width: 900px;
+    min-height: 100vh;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 0;
+    margin: 40px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 32px 0 32px;
     }
-
+.form-body {
+    width: 100%;
+    padding: 0 32px 32px 32px;
+}
     .table th {
         background-color: #f8f9fc;
         font-weight: 600;
     }
-
     .btn-sm {
         padding: 0.25rem 0.5rem;
     }
@@ -162,20 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         rowCount++;
     });
 
-    // Add event listeners to initial rows
-    itemsTable.querySelectorAll('tbody tr').forEach(addRowEventListeners);
-
-    // Remove row
-    itemsTable.addEventListener('click', function(e) {
-        if (e.target.closest('.remove-row')) {
-            const tbody = itemsTable.querySelector('tbody');
-            if (tbody.rows.length > 1) {
-                e.target.closest('tr').remove();
-                calculateTotal();
-            }
-        }
-    });
-
     // Calculate row total
     function calculateRowTotal(row) {
         const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
@@ -193,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const price = parseFloat(row.querySelector('.price').value) || 0;
             total += quantity * price;
         });
-        document.getElementById('total_cost').value = total.toFixed(2);
+        document.getElementById('total_cost').textContent = total.toFixed(2);
     }
 
     // Add event listeners to row inputs
@@ -202,6 +178,20 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('input', () => calculateRowTotal(row));
         });
     }
+
+    // Add event listeners to initial rows
+    itemsTable.querySelectorAll('tbody tr').forEach(addRowEventListeners);
+
+    // Remove row
+    itemsTable.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-row')) {
+            const tbody = itemsTable.querySelector('tbody');
+            if (tbody.rows.length > 1) {
+                e.target.closest('tr').remove();
+                calculateTotal();
+            }
+        }
+    });
 
     // Form submission
     form.addEventListener('submit', async function(e) {
@@ -243,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     order_date: document.getElementById('order_date').value,
                     items: items,
-                    total_cost: parseFloat(document.getElementById('total_cost').value)
+                    total_cost: parseFloat(document.getElementById('total_cost').textContent)
                 })
             });
 

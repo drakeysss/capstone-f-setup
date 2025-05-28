@@ -11,6 +11,7 @@ class Recipe extends Model
         'recipe_day',
         'recipe_type',
         'recipe_name',
+        'recipe_ingredients',
         'recipe_status'
     ];
 } 

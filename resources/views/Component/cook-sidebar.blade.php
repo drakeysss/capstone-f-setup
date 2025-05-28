@@ -4,13 +4,12 @@
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-right: 1px solid #dee2e6;
-    height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px);
     width: 250px;
     position: fixed;
     top: 70px;
     left: 0;
     z-index: 1020;
-    overflow-y: auto;
 }
 
 .cook-portal .sidebar-header {
@@ -37,6 +36,8 @@
 
 .cook-portal .sidebar-body {
     padding: 0.5rem;
+    height: auto;
+    overflow: visible;
 }
 
 .cook-portal .sidebar-category {
@@ -147,7 +148,6 @@
 
         <div class="sidebar-category">GENERAL</div>
         <ul class="sidebar-nav">
-<<<<<<< HEAD
             <li class="nav-item">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -157,9 +157,6 @@
                     </button>
                 </form>
             </li>
-=======
-
->>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
         </ul>
     </div>
 </nav>

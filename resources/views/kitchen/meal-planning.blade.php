@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<<<<<<< HEAD
 <div class="container-fluid">
     <!-- Header -->
     <div class="mb-4">
@@ -131,6 +130,4 @@
         opacity: 0.8;
     }
 </style>
-=======
->>>>>>> 7785673495fd1832d95b196c98c2322b839308d8
 @endsection

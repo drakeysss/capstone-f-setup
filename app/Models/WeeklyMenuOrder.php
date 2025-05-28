@@ -19,6 +19,7 @@ class WeeklyMenuOrder extends Model
     ];
 
     protected $casts = [
-        'is_editable' => 'boolean'
+        'is_editable' => 'boolean',
+        'ingredients' => 'string'
     ];
 } 
