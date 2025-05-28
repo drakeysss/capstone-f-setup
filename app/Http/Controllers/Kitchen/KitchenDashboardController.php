@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Kitchen;
 
 use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
 use App\Models\Recipe;
 use App\Models\ReportReason;
 use App\Models\WasteEntry;
+=======
+use App\Models\Recipe;
+use App\Models\Ingredient;
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 
 class KitchenDashboardController extends BaseDashboardController
 {
@@ -70,13 +75,9 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Recipe & Meal
-    public function recipes()
-    {
-        return view('kitchen.recipes');
-    }
-
     public function mealPlanning()
     {
+<<<<<<< HEAD
         try {
             $recipes = Recipe::all();
             
@@ -107,7 +108,58 @@ class KitchenDashboardController extends BaseDashboardController
             \Log::error('Error in mealPlanning: ' . $e->getMessage());
             return view('kitchen.meal-planning', ['recipes' => []]);
         }
+=======
+
+            $all = Recipe::all();
+
+
+            $recipes = $all
+      ->mapWithKeys(fn($r) => [
+         $r->recipe_name => [
+           'week' => $r->recipe_week,
+           'day'  => $r->recipe_day,
+           'type' => $r->recipe_type
+         ]
+      ]);
+
+        $grouped = $all->groupBy('recipe_week');
+
+      $weekMenus = [
+        1 => $grouped->get('Week 1 & 3')
+              ->groupBy('recipe_day')
+              ->map(fn($dayGroup) => [
+                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
+              ])
+              ->values(), 
+
+        2 => $grouped->get('Week 2 & 4')
+              ->groupBy('recipe_day')
+              ->map(fn($dayGroup) => [
+                  $dayGroup->firstWhere('recipe_type','Breakfast')->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Lunch')   ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Dinner')  ->recipe_name ?? null,
+                  $dayGroup->firstWhere('recipe_type','Snacks')  ->recipe_name ?? null,
+              ])
+              ->values(),
+      ];
+
+
+      $recipesJson = json_encode($recipes); 
+      $weekMenusJson = json_encode($weekMenus); 
+  
+
+      return view('kitchen.meal-planning', [
+        'recipesJson'  => $recipesJson,
+        'weekMenusJson'=> $weekMenusJson,
+      ]);
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     }
+
+
+
 
     public function preparation()
     {
@@ -120,17 +172,75 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Inventory Management
+
+
+    public function inventoryDashboard()
+    {
+        return view('kitchen.inventory.dashboard');
+    }
+        
     public function inventory()
     {
-        return view('kitchen.inventory');
+        $ingredients = Ingredient::all()->map(function ($ingredient) {
+            if ($ingredient->ingredient_quantity < 10) {
+                $ingredient->data_status = 'low stock';
+            } elseif ($ingredient->ingredient_quantity == 0) {
+                $ingredient->data_status = 'out of stock';
+            } else {
+                $ingredient->data_status = 'in stock';
+            }
+            return $ingredient;
+        });
+
+        $lowStockCount = $ingredients->filter(function ($ingredient) {
+            return $ingredient->ingredient_quantity < 10;
+        })->count();
+
+        $totalIngredients = $ingredients->count();
+
+        return view('kitchen.inventory.dashboard', compact('ingredients', 'lowStockCount', 'totalIngredients'));
     }
 
+<<<<<<< HEAD
 
     public function generateInventory()
     {
         
 
         return view('kitchen.inventory.generate');
+=======
+        public function viewIngredient($id){
+
+        $ingredient = Ingredient::findOrFail($id);
+        return view('kitchen.viewIngredient', compact('ingredient'));
+        }
+
+        public function updateIngredient(Request $request, $id)
+        {
+            $ingredient = Ingredient::findOrFail($id);
+            $ingredient->update($request->all());
+            return redirect()->route('kitchen.updateIngredient')->with('success', 'Ingredient updated successfully.');
+        }
+    public function storeIngredient(Request $request)
+    {
+        $request->validate([
+            'ingredient_name' => 'required|string|max:255',
+            'ingredient_category' => 'nullable|string|max:255',
+            'ingredient_unit' => 'nullable|string|max:50',
+            'ingredient_price' => 'nullable|numeric',
+            'ingredient_quantity' => 'nullable|integer',
+        ]);
+
+        Ingredient::create($request->all());
+        return redirect()->route('kitchen.inventory.dashboard')->with('success', 'Ingredient added successfully.');
+    }
+
+    public function deleteIngredient($id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->delete();
+        return redirect()->route('kitchen.deleteIngredient')->with('success', 'Ingredient deleted successfully.');
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     }
 
 
@@ -145,7 +255,20 @@ class KitchenDashboardController extends BaseDashboardController
 
 
 
+<<<<<<< HEAD
     //Kitchen Suppliers Management
+=======
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     public function suppliers()
     {
         return view('kitchen.suppliers');
@@ -258,6 +381,28 @@ class KitchenDashboardController extends BaseDashboardController
         $data = $this->getAnalyticsData();
         return view('kitchen.analytics', $data);
     }
+
+    public function viewReport()
+    {
+        return view('kitchen.reportsForm');
+    }
+
+
+    public function storeReport(Request $request)
+    {
+        // Handle the report submission logic here
+        // For example, validate and save the report data
+        $request->validate([
+            'report_type' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'date' => 'required|date',
+            
+        ]);
+        // Redirect or return a response as needed
+        return redirect()->route('kitchen.reports')->with('success', 'Report submitted successfully.');
+    }
+
+
 
     // Alerts & Notifications
     public function notifications()

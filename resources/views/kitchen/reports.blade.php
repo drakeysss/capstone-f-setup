@@ -1,14 +1,32 @@
 @extends('layouts.app')
 
+
+
+
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
+<<<<<<< HEAD
         <button>
             <a href="{{ route('kitchen.reports_form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                 <i class="fas fa-download fa-sm text-white-50"></i>Submit Report
             </a>
         </button>
+=======
+        <div>
+
+        
+            <button class="btn btn-sm btn-primary shadow-sm">
+            <a href="{{ route('kitchen.reportsForm') }}" class="text-white text-decoration-none">
+                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+            </a>
+            </button>
+
+            
+
+        </div>
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
     </div>
 
     <div class="row">
@@ -82,8 +100,55 @@
                                         </div>
                                     </td>
                                 </tr>
+<<<<<<< HEAD
                                 @endforeach
                             </tbody>
+=======
+                                <tr>
+                                    <td>Meat</td>
+                                    <td>20</td>
+                                    <td>₱45,000</td>
+                                    <td>
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-info" style="width: 65%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Vegetables</td>
+                                    <td>25</td>
+                                    <td>₱15,000</td>
+                                    <td>
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-warning" style="width: 85%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Recipes -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Popular Recipes</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Recipe</th>
+                                    <th>Servings</th>
+                                    <th>Rating</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
                         </table>
                     </div>
                 </div>
@@ -94,6 +159,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<<<<<<< HEAD
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('monthlyOverviewChart');
@@ -238,5 +304,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnMonth) btnMonth.addEventListener('click', () => updateChart('month'));
 });
 </script>
+=======
+<script src="{{ asset('js/kitchen/reports.js') }}"></script>
+
+>>>>>>> 82754a1e2f45f8a597819039003eb702cc4c5524
 @endpush
 @endsection

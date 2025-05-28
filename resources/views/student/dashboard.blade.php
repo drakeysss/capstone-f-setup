@@ -3,66 +3,92 @@
 @section('title', 'Student Dashboard')
 
 @section('content')
-<div class="container">
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h3 class="mb-0">Student Dashboard</h3>
-                        <p class="mb-0 text-muted">Welcome, {{ Auth::user()->name ?? 'Student' }}!</p>
-                    </div>
-                    <div class="text-end">
-                        <div id="currentTime" class="h4 mb-0 text-primary"></div>
-                        <div id="currentDate" class="text-muted"></div>
-                    </div>
-                </div>
-                <!-- Add more dashboard content here if needed -->
-            </div>
+<div class="dashboard">
+    <div class="dashboard-header">
+        <div class="welcome">
+            <h2>Student Dashboard</h2>
+            <p>Welcome, {{ Auth::user()->name ?? 'Student' }}!</p>
+        </div>
+        <div class="datetime">
+            <div id="currentTime" class="time"></div>
+            <div id="currentDate" class="date"></div>
         </div>
     </div>
+    <!-- Add more dashboard content here if needed -->
 </div>
 @endsection
 
 @push('styles')
 <style>
-    #currentTime {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
+.dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    #currentDate {
-        font-size: 1rem;
-    }
+.dashboard-header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.welcome p {
+    margin: 5px 0 0;
+    color: #666;
+}
+
+.datetime {
+    text-align: right;
+}
+
+.time {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.date {
+    color: #666;
+    margin-top: 5px;
+}
 </style>
 @endpush
 
 @push('scripts')
 <script>
-    function updateDateTime() {
-        const now = new Date();
+function updateDateTime() {
+    const now = new Date();
+    
+    // Update time
+    const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    };
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
+    
+    // Update date
+    const dateOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', dateOptions);
+}
 
-        // Update time
-        const timeOptions = {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        };
-        document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', timeOptions);
-
-        // Update date
-        const dateOptions = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', dateOptions);
-    }
-
-    // Update immediately and every second
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+updateDateTime();
+setInterval(updateDateTime, 1000);
 </script>
 @endpush
