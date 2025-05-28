@@ -85,7 +85,15 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
 Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')->group(function () {
     // Dashboard & Overview
     Route::get('/dashboard', [KitchenDashboardController::class, 'dashboard'])->name('dashboard');
+
+
+    // Reports & Analytics
     Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('reports');
+    Route::get('/reports/form', [KitchenDashboardController::class, 'viewReport'])->name('reportsForm');
+    Route::post('/reports/store', [KitchenDashboardController::class, 'storeReport'])->name('reports.store');
+
+
+
 
     // Alerts & Notifications
     Route::get('/alerts', [KitchenDashboardController::class, 'alerts'])->name('alerts');

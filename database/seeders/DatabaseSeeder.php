@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,22 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Admin User
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin',
+        $this->call([
+            UsersTableSeeder::class
         ]);
 
-        // Create Cook Users
-        User::create([
-            'name' => 'Cristina Manlunas',
-            'email' => 'cook1@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'cook',
+        $this->call([
+            RecipeTableSeeder::class
         ]);
 
+<<<<<<< HEAD
         User::create([
             'name' => 'Mary Cook',
             'email' => 'cook2@example.com',
@@ -73,5 +64,7 @@ class DatabaseSeeder extends Seeder
             StudentMealSeeder::class,
             MenuSeeder::class,
         ]);
+=======
+>>>>>>> c17d1de84e4f3910ce17173a1b62957779106452
     }
 }
