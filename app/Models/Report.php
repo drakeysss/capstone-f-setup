@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     use HasFactory;
-
+    
+    protected $table = 'reports';
     protected $fillable = [
-        'user_id',
+        'student_id',
         'report_date',
         'meal_type',
         'rating',
@@ -26,4 +27,4 @@ class Report extends Model
     {
         return $this->belongsTo(User::class);
     }
-} 
+}

@@ -59,7 +59,7 @@ class StudentDashboardController extends BaseDashboardController
 
     public function reports()
     {
-        $reports = Report::where('user_id', Auth::id())
+        $reports = Report::where('student_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
             

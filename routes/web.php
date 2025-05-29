@@ -129,7 +129,7 @@ Route::middleware(['auth', 'role:kitchen'])->prefix('kitchen')->name('kitchen.')
     Route::get('/meal-planning', [KitchenDashboardController::class, 'mealPlanning'])->name('meal-planning');
 
     // Inventory Management
-    Route::get('/inventory', [KitchenDashboardController::class, 'inventory'])->name('inventory');
+    Route::get('/inventory', [KitchenDashboardController::class, 'inventoryDashboard'])->name('inventory');
     Route::get('/inventory/dashboard', [KitchenDashboardController::class, 'inventoryDashboard'])->name('inventory.dashboard');
     Route::get('/inventory/generate', [KitchenDashboardController::class, 'generateInventory'])->name('inventory.generate');
     
