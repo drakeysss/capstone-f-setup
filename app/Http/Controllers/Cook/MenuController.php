@@ -11,7 +11,7 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::with('items')->get();
+        $menus = Menu::with('ingredients')->get();
         return view('cook.menu.index', compact('menus'));
     }
 

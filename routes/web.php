@@ -13,6 +13,7 @@ use App\Http\Controllers\Cook\OrderController;
 use App\Http\Controllers\Kitchen\KitchenDashboardController;
 use App\Http\Controllers\Student\StudentReportController;
 use App\Http\Controllers\Student\StudentHistoryController;
+use App\Http\Controllers\Student\StudentMenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Student Routes
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])->name('dashboard');
-    Route::get('/menu', [StudentDashboardController::class, 'menu'])->name('menu');
+    Route::get('/menu', [StudentMenuController::class, 'index'])->name('menu');
     Route::get('/notifications', [StudentDashboardController::class, 'notifications'])->name('notifications');
     Route::get('/settings', [StudentDashboardController::class, 'settings'])->name('settings');
     Route::get('/history', [StudentHistoryController::class, 'index'])->name('history');

@@ -38,4 +38,9 @@ class Menu extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function ingredients()
+    {
+        return $this->hasMany(MenuItem::class);
+    }
 } 

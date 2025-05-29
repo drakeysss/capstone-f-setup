@@ -133,12 +133,6 @@
                     <span class="small">Purchase Orders</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.weekly-menu-orders.*') ? 'active' : '' }}" href="{{ route('cook.weekly-menu-orders.index') }}">
-                    <i class="bi bi-calendar-week"></i>
-                    <span>Weekly Menu Orders</span>
-                </a>
-            </li>
         </ul>
 
         <div class="sidebar-category">ANALYTICS</div>
