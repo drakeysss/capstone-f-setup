@@ -132,9 +132,50 @@
 
         /* Main Content */
         .main-content {
-            margin-left: var(--sidebar-width);
+            margin-left: calc(var(--sidebar-width) + 20px);
             min-height: 100vh;
-            padding: 1.25rem;
+            padding: 1.5rem;
+            width: calc(100% - var(--sidebar-width) - 20px);
+            background: #f8f9fc;
+        }
+
+        .container-fluid {
+            padding: 1.5rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .alert {
+            margin: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            box-shadow: var(--card-shadow);
+        }
+
+        .alert-danger {
+            background-color: #fff5f5;
+            color: #e53e3e;
+        }
+
+        .alert-success {
+            background-color: #f0fff4;
+            color: #38a169;
         }
 
         .nav-link {
@@ -159,18 +200,6 @@
         .navbar-brand {
             font-weight: 600;
             color: var(--primary-color);
-        }
-
-        /* Card Styles */
-        .card {
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: var(--card-shadow);
-        }
-
-        .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Table Styles */
@@ -204,7 +233,13 @@
         /* Responsive Styles */
         @media (max-width: 1024px) {
             .main-content {
-                margin-left: 70px;
+                margin-left: 90px;
+                width: calc(100% - 90px);
+                padding: 1.5rem;
+            }
+
+            .container-fluid {
+                padding: 1.5rem;
             }
 
             .sidebar {
@@ -254,6 +289,21 @@
         }
 
         @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .container-fluid {
+                padding: 1.5rem;
+            }
+
+            .alert {
+                margin: 1.5rem;
+                padding: 1.5rem;
+            }
+
             .sidebar {
                 transform: translateX(-100%);
                 width: var(--sidebar-width);
@@ -278,10 +328,6 @@
                 margin-right: 0.75rem;
             }
 
-            .main-content {
-                margin-left: 0;
-            }
-
             .burger-menu {
                 display: block;
                 position: fixed;
@@ -304,10 +350,6 @@
 
             .burger-menu:hover {
                 background: var(--secondary-color);
-            }
-
-            .container-fluid {
-                padding: 0.5rem;
             }
 
             .card {
@@ -368,23 +410,18 @@
             @endif
 
             <!-- Main Content -->
-            <div class="main-content">
-                <!-- Burger Menu -->
-                <button class="burger-menu d-md-none" onclick="toggleSidebar()">
-                    <i class="bi bi-list"></i>
-                </button>
+            @if(session('error'))
+                <div class="alert alert-danger mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-            <main class="main-content" style="margin-left:250px; padding-top:60px; min-height:calc(100vh - 70px); margin-top:20px; background:#f8f9fc;">
-                @if(session('error'))
-                    <div class="alert alert-danger mb-4">
-                        {{ session('error') }}
-                    </div>
-                @endif
-                @if(session('success'))
-                    <div class="alert alert-success mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+            <main class="main-content" style="padding-top:60px; min-height:calc(100vh - 70px); margin-top:20px; background:#f8f9fc;">
                 @yield('content')
             </main>
         @endif

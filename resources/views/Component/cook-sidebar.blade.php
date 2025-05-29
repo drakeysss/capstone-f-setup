@@ -123,15 +123,15 @@
         <div class="sidebar-category">MANAGEMENT</div>
         <ul class="sidebar-nav">
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cook.menu') ? 'active' : '' }}" href="{{ route('cook.menu') }}">
-                    <i class="bi bi-journal-text icon"></i>
-                    <span class="small">Weekly Menu and Ingredients</span>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('cook.purchase-orders.*') ? 'active' : '' }}" href="{{ route('cook.purchase-orders.index') }}">
                     <i class="bi bi-cart-check icon"></i>
                     <span class="small">Purchase Orders</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cook.weekly-menu.*') ? 'active' : '' }}" href="{{ route('cook.weekly-menu.index') }}">
+                    <i class="bi bi-calendar-week icon"></i>
+                    <span class="small">Weekly Menu & Ingredients</span>
                 </a>
             </li>
         </ul>

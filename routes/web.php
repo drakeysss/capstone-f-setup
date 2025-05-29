@@ -12,6 +12,7 @@ use App\Http\Controllers\Cook\MenuController;
 use App\Http\Controllers\Cook\InventoryController;
 use App\Http\Controllers\Cook\OrderController;
 use App\Http\Controllers\Kitchen\KitchenDashboardController;
+use App\Http\Controllers\Cook\WeeklyMenuOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,10 +100,8 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
     Route::get('/purchase-orders/{purchaseOrder}/edit', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
     Route::put('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\Cook\PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
 
-    // Weekly Menu Orders
-    Route::get('/weekly-menu-orders', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'index'])->name('cook.weekly-menu-orders.index');
-    Route::put('/weekly-menu-orders/{weeklyMenuOrder}', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'update'])->name('cook.weekly-menu-orders.update');
-    Route::post('/weekly-menu-orders/{weeklyMenuOrder}/toggle-editability', [App\Http\Controllers\Cook\WeeklyMenuOrderController::class, 'toggleEditability'])->name('cook.weekly-menu-orders.toggle-editability');
+    // Weekly Menu Management
+    Route::resource('weekly-menu', App\Http\Controllers\Cook\WeeklyMenuController::class);
 });
 
 // Kitchen Routes

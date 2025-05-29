@@ -49,160 +49,46 @@
         </a>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-card">
-        <div class="card-header">
-            <h5 class="card-title">Recent Orders</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table" id="ordersTable">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($recentOrders ?? [] as $order)
-                            @foreach($order->items as $index => $item)
-                            <tr>
-                                @if($index === 0)
-                                    <td rowspan="{{ count($order->items) }}">#{{ $order->id }}</td>
-                                @endif
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->unit }}</td>
-                                <td>₱{{ number_format($item->price, 2) }}</td>
-                                @if($index === 0)
-                                    <td rowspan="{{ count($order->items) }}">
-                                        <span class="status-badge {{ $order->status }}">
-                                            {{ ucfirst($order->status) }}
-                                        </span>
-                                    </td>
-                                @endif
-                            </tr>
-                            @endforeach
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No orders found</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+    <!-- Today's Menu Section -->
+    <div class="menu-section mt-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Today's Menu ({{ $currentDay }})</h5>
             </div>
-        </div>
-    </div>
-
-    <!-- Menu Overview -->
-    <div class="main-card">
-        <div class="card-header">
-            <h5 class="card-title">Today's Menu ({{ $currentDay }}, {{ $weekType }})</h5>
-        </div>
-        <div class="card-body">
-            <div class="menu-overview">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h4 style="color: #22bbea;">Breakfast</h4>
-                        @foreach($weeklyMenu as $menu)
-                            @if($menu->meal_type === 'Breakfast')
-                                <p><strong>{{ strtoupper($menu->menu_item) }}</strong></p>
-                                @php
-                                    $ingredients = $menu->ingredients;
-                                    $ingredientList = [];
-                                    
-                                    if (Str::startsWith($ingredients, '[')) {
-                                        $ingredientList = json_decode($ingredients, true) ?? [];
-                                    } else {
-                                        $lines = explode("\n", $ingredients);
-                                        foreach ($lines as $line) {
-                                            $parts = explode(',', $line);
-                                            foreach ($parts as $part) {
-                                                $trimmed = trim($part);
-                                                if (!empty($trimmed)) {
-                                                    $ingredientList[] = $trimmed;
-                                                }
-                                            }
-                                        }
-                                    }
-                                @endphp
-                                <ul>
-                                    @foreach($ingredientList as $ingredient)
-                                        <li>{{ $ingredient }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
+            <div class="card-body">
+                @if($todaysMenu->count() > 0)
+                    <div class="row">
+                        @foreach($todaysMenu as $menu)
+                            <div class="col-md-4 mb-4">
+                                <div class="menu-card">
+                                    <div class="menu-card-header">
+                                        <h6 class="mb-0">{{ ucfirst($menu->meal_type) }}</h6>
+                                    </div>
+                                    <div class="menu-card-body">
+                                        <h5 class="menu-item">{{ $menu->menu }}</h5>
+                                        @if($menu->ingredients)
+                                            <div class="ingredients mt-3">
+                                                <h6 class="text-muted mb-2">Ingredients:</h6>
+                                                <ul class="list-unstyled">
+                                                    @php
+                                                        $ingredients = explode(',', $menu->ingredients);
+                                                    @endphp
+                                                    @foreach($ingredients as $ingredient)
+                                                        @if(trim($ingredient))
+                                                            <li><i class="bi bi-dot"></i> {{ trim($ingredient) }}</li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
-                    <div class="col-md-4">
-                        <h4 style="color: #22bbea;">Lunch</h4>
-                        @foreach($weeklyMenu as $menu)
-                            @if($menu->meal_type === 'Lunch')
-                                <p><strong>{{ strtoupper($menu->menu_item) }}</strong></p>
-                                @php
-                                    $ingredients = $menu->ingredients;
-                                    $ingredientList = [];
-                                    
-                                    if (Str::startsWith($ingredients, '[')) {
-                                        $ingredientList = json_decode($ingredients, true) ?? [];
-                                    } else {
-                                        $lines = explode("\n", $ingredients);
-                                        foreach ($lines as $line) {
-                                            $parts = explode(',', $line);
-                                            foreach ($parts as $part) {
-                                                $trimmed = trim($part);
-                                                if (!empty($trimmed)) {
-                                                    $ingredientList[] = $trimmed;
-                                                }
-                                            }
-                                        }
-                                    }
-                                @endphp
-                                <ul>
-                                    @foreach($ingredientList as $ingredient)
-                                        <li>{{ $ingredient }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        @endforeach
-                    </div>
-                    <div class="col-md-4">
-                        <h4 style="color: #22bbea;">Dinner</h4>
-                        @foreach($weeklyMenu as $menu)
-                            @if($menu->meal_type === 'Dinner')
-                                <p><strong>{{ strtoupper($menu->menu_item) }}</strong></p>
-                                @php
-                                    $ingredients = $menu->ingredients;
-                                    $ingredientList = [];
-                                    
-                                    if (Str::startsWith($ingredients, '[')) {
-                                        $ingredientList = json_decode($ingredients, true) ?? [];
-                                    } else {
-                                        $lines = explode("\n", $ingredients);
-                                        foreach ($lines as $line) {
-                                            $parts = explode(',', $line);
-                                            foreach ($parts as $part) {
-                                                $trimmed = trim($part);
-                                                if (!empty($trimmed)) {
-                                                    $ingredientList[] = $trimmed;
-                                                }
-                                            }
-                                        }
-                                    }
-                                @endphp
-                                <ul>
-                                    @foreach($ingredientList as $ingredient)
-                                        <li>{{ $ingredient }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
+                @else
+                    <p class="text-muted mb-0">No menu items scheduled for today.</p>
+                @endif
             </div>
         </div>
     </div>
@@ -211,6 +97,43 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/cook.css') }}">
+<style>
+    .menu-section .card {
+        border: none;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+    .menu-section .card-header {
+        background-color: #fff;
+        border-bottom: 1px solid #e3e6f0;
+    }
+    .menu-card {
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        height: 100%;
+    }
+    .menu-card-header {
+        background: #f8f9fc;
+        padding: 1rem;
+        border-bottom: 1px solid #e3e6f0;
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .menu-card-body {
+        padding: 1rem;
+    }
+    .menu-item {
+        color: #2e59d9;
+        font-weight: 600;
+    }
+    .ingredients ul li {
+        margin-bottom: 0.25rem;
+        color: #5a5c69;
+    }
+    .ingredients ul li i {
+        color: #2e59d9;
+        margin-right: 0.5rem;
+    }
+</style>
 @endpush
 
 @push('scripts')
@@ -228,8 +151,7 @@
         };
         document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
     }
-    
-    updateDateTime();
     setInterval(updateDateTime, 1000);
+    updateDateTime();
 </script>
 @endpush

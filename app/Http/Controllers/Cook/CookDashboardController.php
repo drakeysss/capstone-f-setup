@@ -9,7 +9,9 @@ use App\Models\Menu;
 use App\Models\Supplier;
 use App\Models\Inventory;
 use App\Models\PurchaseOrder;
-use App\Models\WeeklyMenuOrder;
+use App\Models\WeeklyMenu;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class CookDashboardController extends BaseDashboardController
 {
@@ -26,27 +28,6 @@ class CookDashboardController extends BaseDashboardController
         $completedOrders = Order::where('status', 'completed')->count() + 
                           PurchaseOrder::where('status', 'completed')->count();
 
-        // Get current day and week
-        $currentDay = now()->format('l'); // Gets current day name (Monday, Tuesday, etc.)
-        
-        // Calculate week type based on the actual week of the month
-        $dayOfMonth = now()->day;
-        $weekOfMonth = ceil($dayOfMonth / 7);
-        $weekType = ($weekOfMonth % 2 == 0) ? 'Week 2 & 4' : 'Week 1 & 3';
-        
-        // Get weekly menu for current day
-        $weeklyMenu = WeeklyMenuOrder::where('week', $weekType)
-            ->where('day', $currentDay)
-            ->orderBy('meal_type')
-            ->get();
-
-        // Get the most recent completed purchase order
-        $recentOrders = PurchaseOrder::with(['items'])
-            ->where('status', 'completed')
-            ->orderBy('updated_at', 'desc')
-            ->take(1)
-            ->get();
-
         // Get inventory statistics
         $lowStockItems = Inventory::where('quantity', '<=', \DB::raw('minimum_stock'))->count();
         $totalItems = Inventory::count();
@@ -55,16 +36,27 @@ class CookDashboardController extends BaseDashboardController
             ->take(3)
             ->get();
 
+        // Determine current day and week type
+        $currentDay = Carbon::now()->format('l'); // Get current day name (e.g., Monday, Tuesday)
+
+        // Determine if it's Week 1&3 or Week 2&4 based on calendar week parity
+        $currentCalendarWeek = Carbon::now()->weekOfYear; // Get the current calendar week number of the year
+        $weekType = ($currentCalendarWeek % 2 != 0) ? 'week1' : 'week2';
+
+        // Get today's menu items from the weekly_menus table
+        $todaysMenu = WeeklyMenu::where('day', strtolower($currentDay))
+            ->where('week_type', $weekType)
+            ->orderByRaw("FIELD(meal_type, 'breakfast', 'lunch', 'dinner')")
+            ->get();
+
         return compact(
             'pendingOrders',
             'completedOrders',
-            'weeklyMenu',
-            'recentOrders',
             'lowStockItems',
             'totalItems',
             'lowStockItemsList',
-            'currentDay',
-            'weekType'
+            'todaysMenu',
+            'currentDay'
         );
     }
 
