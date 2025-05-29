@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recipes', function (Blueprint $table) {
-            $table->id('recipe_id');
-            $table->string('recipe_name');
-            $table->string('recipe_week')->nullable();
-            $table->string('recipe_day')->nullable();
-            $table->string('recipe_type')->nullable();
+        Schema::create('reports_reasons_list', function (Blueprint $table) {
+            $table->id('report_id');
+            $table->string('report_name');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recipes');
+        //
     }
 };

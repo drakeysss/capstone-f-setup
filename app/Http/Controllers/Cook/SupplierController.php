@@ -119,4 +119,77 @@ class SupplierController extends Controller
                 ->with('error', 'Failed to create purchase order. ' . $e->getMessage());
         }
     }
+
+    public function purchaseOrder(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'items' => 'required|array',
+                'items.*.description' => 'required|string',
+                'items.*.quantity' => 'required|numeric|min:1',
+                'items.*.unit' => 'required|string',
+                'items.*.unit_price' => 'required|numeric|min:0',
+            ]);
+
+            DB::beginTransaction();
+
+            $totalAmount = collect($validated['items'])->sum(function ($item) {
+                return $item['quantity'] * $item['unit_price'];
+            });
+
+            $supplier = Supplier::first();
+            if (!$supplier) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No supplier found. Please add a supplier first.'
+                ], 400);
+            }
+
+            $purchaseOrder = PurchaseOrder::create([
+                'supplier_id' => $supplier->id,
+                'status' => 'pending',
+                'total_amount' => $totalAmount,
+            ]);
+
+            foreach ($validated['items'] as $item) {
+                $purchaseOrder->items()->create([
+                    'description' => $item['description'],
+                    'quantity' => $item['quantity'],
+                    'unit' => $item['unit'],
+                    'unit_price' => $item['unit_price'],
+                    'total_price' => $item['quantity'] * $item['unit_price'],
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Purchase order created successfully',
+                'purchase_order' => $purchaseOrder->load('items')
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create purchase order: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getPurchaseOrders()
+    {
+        $purchaseOrders = PurchaseOrder::with(['items', 'supplier'])
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'purchase_orders' => $purchaseOrders
+        ]);
+    }
+
+    public function purchaseOrderPage() {
+        return view('cook.purchase_order');
+    }
 }

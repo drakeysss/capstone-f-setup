@@ -11,7 +11,7 @@
                 <div class="col-auto">
                     <button class="btn btn-secondary">
                         <i class="bi bi-arrow-left">
-                            <a href="{{ route('kitchen.inventory.index') }}">Back to Inventory</a>
+                            <a href="{{ route('kitchen.inventory') }}">Back to Inventory</a>
                         </i>
                     </button>
                 </div>

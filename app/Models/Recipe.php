@@ -15,6 +15,7 @@ class Recipe extends Model
         'recipe_week',
         'recipe_day',
         'recipe_type',
+        'recipe_status'
     ];
 
     public $timestamps = true;

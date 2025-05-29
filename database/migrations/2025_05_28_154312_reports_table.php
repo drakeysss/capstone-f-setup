@@ -10,11 +10,12 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('report_date');
+            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->enum('meal_type', ['breakfast', 'lunch', 'dinner']);
-            $table->integer('rating');
+            $table->dateTime('report_date');
+            $table->json('meal_items');
             $table->text('feedback');
+            $table->integer('rating');
             $table->timestamps();
         });
     }

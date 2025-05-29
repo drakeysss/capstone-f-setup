@@ -6,20 +6,100 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Menu;
+use App\Models\Inventory;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $orders = Order::with(['items.menu', 'student'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return view('cook.orders.index', compact('orders'));
+        $this->middleware('role:cook');
     }
 
-    public function show(Order $order)
+    public function index()
     {
-        $order->load(['items.menu', 'student']);
+        return view('cook.orders.index');
+    }
+
+    public function pendingOrders()
+    {
+        $orders = Order::with(['items.menu', 'student'])
+            ->whereIn('status', ['pending', 'preparing'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $menuItems = Menu::where('is_available', true)->get();
+        return view('cook.orders.pending', compact('orders', 'menuItems'));
+    }
+
+    public function completedOrders()
+    {
+        $orders = Order::with(['items.menu', 'student'])
+            ->where('status', 'completed')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(20);
+        return view('cook.orders.completed', compact('orders'));
+    }
+
+    public function lowStockItems()
+    {
+        $lowStockItems = Inventory::where('quantity', '<=', \DB::raw('minimum_stock'))
+            ->orderBy('quantity')
+            ->get();
+        return view('cook.inventory.low-stock', compact('lowStockItems'));
+    }
+
+    public function activeMenuItems()
+    {
+        $menuItems = Menu::with('category')
+            ->where('is_available', true)
+            ->orderBy('name')
+            ->get();
+        return view('cook.menu.active', compact('menuItems'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.menu_id' => 'required|exists:menus,id',
+            'items.*.quantity' => 'required|integer|min:1'
+        ]);
+
+        $order = Order::create([
+            'status' => 'pending',
+            'total_amount' => 0
+        ]);
+
+        $total = 0;
+        foreach ($request->items as $item) {
+            $menu = Menu::find($item['menu_id']);
+            $subtotal = $menu->price * $item['quantity'];
+            $total += $subtotal;
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'menu_id' => $item['menu_id'],
+                'quantity' => $item['quantity'],
+                'price' => $menu->price,
+                'subtotal' => $subtotal
+            ]);
+        }
+
+        $order->update(['total_amount' => $total]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function complete($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update(['status' => 'completed']);
+        return response()->json(['success' => true]);
+    }
+
+    public function show($id)
+    {
+        $order = Order::with(['items.menu', 'student'])->findOrFail($id);
         return view('cook.orders.show', compact('order'));
     }
 
@@ -57,15 +137,6 @@ class OrderController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         return view('cook.orders.daily', compact('orders'));
-    }
-
-    public function pendingOrders()
-    {
-        $orders = Order::with(['items.menu', 'student'])
-            ->whereIn('status', ['pending', 'preparing'])
-            ->orderBy('created_at', 'asc')
-            ->get();
-        return view('cook.orders.pending', compact('orders'));
     }
 
     public function orderHistory()

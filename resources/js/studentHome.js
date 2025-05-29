@@ -1,15 +1,14 @@
 $(document).ready(function() {
-    // Function to save orders to localStorage
     function saveOrdersToLocalStorage(orders) {
         localStorage.setItem('savedOrders', JSON.stringify(orders));
     }
 
-    // Function to load orders from localStorage
+  
     function loadOrdersFromLocalStorage() {
         const savedOrders = localStorage.getItem('savedOrders');
         if (savedOrders) {
             const orders = JSON.parse(savedOrders);
-            $('#savedOrdersTable tbody').empty(); // Clear existing rows
+            $('#savedOrdersTable tbody').empty(); 
             orders.forEach(order => {
                 $('#savedOrdersTable tbody').append(`
                     <tr>
