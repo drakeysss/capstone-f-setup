@@ -61,7 +61,7 @@ class StudentDashboardController extends BaseDashboardController
     {
         $reports = Report::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
             
         return view('student.reports', compact('reports'));
     }
