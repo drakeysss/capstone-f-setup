@@ -11,33 +11,6 @@
         </div>
     </div>
 
-    <!-- Rated Meals Section -->
-    <div class="rated-meals-section mb-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">My Rated Meals</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Meal</th>
-                                <th>Rating</th>
-                                <th>Feedback</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ratedMealsTable">
-                            <!-- Sample rated meals - will be populated from localStorage -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="schedule-card">
         <div class="schedule-header">
             <h2>Monthly Meal Schedule</h2>

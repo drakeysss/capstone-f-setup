@@ -27,7 +27,7 @@ class StudentHistoryController extends Controller
             });
 
         // Get user's ratings/feedback
-        $ratings = Report::where('student_id', Auth::id())
+        $ratings = Report::where('user_id', Auth::id())
             ->where('report_date', '<', now()->startOfDay())
             ->orderBy('report_date', 'desc')
             ->get()
@@ -63,7 +63,7 @@ class StudentHistoryController extends Controller
 
         $report = Report::updateOrCreate(
             [
-                'student_id' => Auth::id(),
+                'user_id' => Auth::id(),
                 'report_date' => $request->date,
                 'meal_type' => $request->meal_type
             ],

@@ -16,7 +16,7 @@ class StudentDashboardController extends BaseDashboardController
 
     protected function getDashboardData()
     {
-        $reports = Report::where('student_id', Auth::id())
+        $reports = Report::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
@@ -59,7 +59,7 @@ class StudentDashboardController extends BaseDashboardController
 
     public function reports()
     {
-        $reports = Report::where('student_id', Auth::id())
+        $reports = Report::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
             
@@ -78,7 +78,7 @@ class StudentDashboardController extends BaseDashboardController
         ]);
 
         $report = Report::create([
-            'student_id' => Auth::id(),
+            'user_id' => Auth::id(),
             'meal_type' => $request->meal_type,
             'report_date' => $request->report_date,
             'meal_items' => json_encode($request->meal_items),
