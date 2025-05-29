@@ -101,6 +101,32 @@
 
 @section('content')
 <div class="container-fluid p-4">
+    <!-- Rated Meals Section -->
+    <div class="rated-meals-section mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">My Rated Meals</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Meal</th>
+                                <th>Rating</th>
+                                <th>Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ratedMealsTable">
+                            <!-- Sample rated meals - will be populated from localStorage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 mb-4">
             <!-- Main Card for Meal History / Pangunang Card sa Meal History -->
@@ -243,12 +269,14 @@
                                         @if($feedback)
                                         <div class="feedback-item">
                                             <div class="feedback-rating">
-                                                {{ str_repeat('★', $feedback->rating) }}{{ str_repeat('☆', 5 - $feedback->rating) }}
+                                                {{ str_repeat('★', $feedback->rating ?? 0) }}{{ str_repeat('☆', 5 - ($feedback->rating ?? 0)) }}
                                             </div>
-                                            <div class="feedback-comment">{{ $feedback->feedback }}</div>
+                                            <div class="feedback-comment">{{ $feedback->feedback ?? 'No feedback provided' }}</div>
                                             <div class="feedback-actions">
-                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at->format('M d, Y h:i A') }}</span>
-                                                <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at ? $feedback->updated_at->format('M d, Y h:i A') : 'N/A' }}</span>
+                                                @if($feedback->id)
+                                                    <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                @endif
                                             </div>
                                         </div>
                                         @endif
@@ -287,12 +315,14 @@
                                         @if($feedback)
                                         <div class="feedback-item">
                                             <div class="feedback-rating">
-                                                {{ str_repeat('★', $feedback->rating) }}{{ str_repeat('☆', 5 - $feedback->rating) }}
+                                                {{ str_repeat('★', $feedback->rating ?? 0) }}{{ str_repeat('☆', 5 - ($feedback->rating ?? 0)) }}
                                             </div>
-                                            <div class="feedback-comment">{{ $feedback->feedback }}</div>
+                                            <div class="feedback-comment">{{ $feedback->feedback ?? 'No feedback provided' }}</div>
                                             <div class="feedback-actions">
-                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at->format('M d, Y h:i A') }}</span>
-                                                <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at ? $feedback->updated_at->format('M d, Y h:i A') : 'N/A' }}</span>
+                                                @if($feedback->id)
+                                                    <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                @endif
                                             </div>
                                         </div>
                                         @endif
@@ -331,12 +361,14 @@
                                         @if($feedback)
                                         <div class="feedback-item">
                                             <div class="feedback-rating">
-                                                {{ str_repeat('★', $feedback->rating) }}{{ str_repeat('☆', 5 - $feedback->rating) }}
+                                                {{ str_repeat('★', $feedback->rating ?? 0) }}{{ str_repeat('☆', 5 - ($feedback->rating ?? 0)) }}
                                             </div>
-                                            <div class="feedback-comment">{{ $feedback->feedback }}</div>
+                                            <div class="feedback-comment">{{ $feedback->feedback ?? 'No feedback provided' }}</div>
                                             <div class="feedback-actions">
-                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at->format('M d, Y h:i A') }}</span>
-                                                <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                <span class="text-muted small">Last updated: {{ $feedback->updated_at ? $feedback->updated_at->format('M d, Y h:i A') : 'N/A' }}</span>
+                                                @if($feedback->id)
+                                                    <button class="btn btn-link btn-sm edit-feedback" data-report-id="{{ $feedback->id }}" data-meal-type="{{ $feedback->meal_type }}">Edit</button>
+                                                @endif
                                             </div>
                                         </div>
                                         @endif
@@ -511,6 +543,43 @@
         align-items: center;
         margin-top: 5px;
     }
+
+    /* Rated Meals Section Styling */
+    .rated-meals-section {
+        margin-bottom: 2rem;
+    }
+
+    .rated-meals-section .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .rated-meals-section .card-header {
+        background: #4e73df;
+        color: white;
+        border-bottom: none;
+    }
+
+    .rated-meals-section .table th {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .rated-meals-section .rating-stars {
+        color: #ffc107;
+    }
+
+    .rated-meals-section .feedback-text {
+        max-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .rated-meals-section .view-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 </style>
 @endpush
 
@@ -554,11 +623,11 @@
                     feedbackContainer.innerHTML = `
                         <div class="feedback-item">
                             <div class="feedback-rating">
-                                ${'★'.repeat(feedback.rating)}${'☆'.repeat(5 - feedback.rating)}
+                                ${'★'.repeat(feedback.rating || 0)}${'☆'.repeat(5 - (feedback.rating || 0))}
                             </div>
-                            <div class="feedback-comment">${feedback.comment}</div>
+                            <div class="feedback-comment">${feedback.comment || 'No feedback provided'}</div>
                             <div class="feedback-actions">
-                                <span class="text-muted small">Last updated: ${timestamp.toLocaleString()}</span>
+                                <span class="text-muted small">Last updated: ${feedback.timestamp ? new Date(feedback.timestamp).toLocaleString() : 'N/A'}</span>
                             </div>
                         </div>
                     `;
@@ -776,12 +845,12 @@
                             // Update feedback in DOM
                             const feedbackContainer = document.getElementById(`${mealType}Feedback`);
                             feedbackContainer.innerHTML = `
-                                <div class=\"feedback-item\">
-                                    <div class=\"feedback-rating\">${'★'.repeat(newRating)}${'☆'.repeat(5 - newRating)}</div>
-                                    <div class=\"feedback-comment\">${newComment}</div>
-                                    <div class=\"feedback-actions\">
-                                        <span class=\"text-muted small\">Last updated: just now</span>
-                                        <button class=\"btn btn-link btn-sm edit-feedback\" data-report-id=\"${reportId}\" data-meal-type=\"${mealType}\">Edit</button>
+                                <div class="feedback-item">
+                                    <div class="feedback-rating">${'★'.repeat(newRating)}${'☆'.repeat(5 - newRating)}</div>
+                                    <div class="feedback-comment">${newComment}</div>
+                                    <div class="feedback-actions">
+                                        <span class="text-muted small">Last updated: just now</span>
+                                        <button class="btn btn-link btn-sm edit-feedback" data-report-id="${reportId}" data-meal-type="${mealType}">Edit</button>
                                     </div>
                                 </div>
                             `;
@@ -808,6 +877,61 @@
                 currentlyEditing = null;
             }
         });
+
+        // Function to load rated meals from localStorage
+        function loadRatedMeals() {
+            const ratedMealsTable = document.getElementById('ratedMealsTable');
+            ratedMealsTable.innerHTML = '';
+
+            // Get all keys from localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('feedback_')) {
+                    const feedback = JSON.parse(localStorage.getItem(key));
+                    const [_, date, mealType] = key.split('_');
+                    
+                    // Create table row
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${new Date(date).toLocaleDateString()}</td>
+                        <td>${mealType.charAt(0).toUpperCase() + mealType.slice(1)}</td>
+                        <td>
+                            <span class="rating-stars">
+                                ${'★'.repeat(feedback.rating || 0)}${'☆'.repeat(5 - (feedback.rating || 0))}
+                            </span>
+                        </td>
+                        <td class="feedback-text" title="${feedback.comment || 'No feedback provided'}">${feedback.comment || 'No feedback provided'}</td>
+                    `;
+                    ratedMealsTable.appendChild(row);
+                }
+            }
+
+            // If no rated meals, show message
+            if (ratedMealsTable.children.length === 0) {
+                ratedMealsTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No rated meals yet. Rate a meal to see it here!
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Load rated meals when page loads
+        loadRatedMeals();
+
+        // Listen for storage changes from other tabs/windows
+        window.addEventListener('storage', loadRatedMeals);
+
+        // Listen for feedback save in history page/modal
+        const saveFeedbackBtn = document.getElementById('saveFeedback');
+        if (saveFeedbackBtn) {
+            saveFeedbackBtn.addEventListener('click', function() {
+                // Wait a short moment for localStorage to update, then reload rated meals
+                setTimeout(loadRatedMeals, 200);
+            });
+        }
     });
 </script>
 @endpush

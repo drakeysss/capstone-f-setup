@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\RecipeTableSeeders;
+use Database\Seeders\StudentMealSeeder;
+use Database\Seeders\MenuSeeder;
+use Database\Seeders\IngredientSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -45,6 +48,16 @@ class DatabaseSeeder extends Seeder
             'role' => 'cook',
         ]);
 
+        $this->call([
+            StudentMealSeeder::class,
+            MenuSeeder::class,
+        ]);
+
+        $this->call([
+            IngredientSeeder::class
+        ]);
+
+            
         User::create([
             'name' => 'Mary Cook',
             'email' => 'cook2@example.com',

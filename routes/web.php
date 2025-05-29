@@ -46,6 +46,8 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::put('/history/{report}', [StudentHistoryController::class, 'updateRating'])->name('history.update');
     Route::get('/reports', [StudentDashboardController::class, 'reports'])->name('reports');
     Route::post('/reports', [StudentDashboardController::class, 'storeReport'])->name('reports.store');
+    Route::put('/reports/{report}', [StudentReportController::class, 'update'])->name('reports.update');
+    Route::delete('/reports/{report}', [StudentReportController::class, 'destroy'])->name('reports.destroy');
 });
 
 // Cook Routes
@@ -66,14 +68,14 @@ Route::middleware(['auth', 'role:cook'])->prefix('cook')->name('cook.')->group(f
 
     // Menu Management
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-    Route::get('/menu/active', [OrderController::class, 'activeMenuItems'])->name('menu.active');
+    Route::get('/menu/active', [MenuController::class, 'activeMenuItems'])->name('menu.active');
     Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
     Route::put('/menu/{menu}', [MenuController::class, 'update'])->name('menu.update');
     Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->name('menu.delete');
 
     // Inventory Management
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
-    Route::get('/inventory/low-stock', [OrderController::class, 'lowStockItems'])->name('inventory.low-stock');
+    Route::get('/inventory/low-stock', [InventoryController::class, 'lowStockItems'])->name('inventory.low-stock');
     Route::get('/inventory/{item}', [InventoryController::class, 'viewIngredient'])->name('inventory.show');
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
     Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
@@ -147,12 +149,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reportForm', [KitchenDashboardController::class, 'getReportForm'])->name('kitchen.reports_form');
         Route::get('/reports', [KitchenDashboardController::class, 'reports'])->name('kitchen.reports');
         Route::post('/waste-entry', [KitchenDashboardController::class, 'storeWasteEntry'])->name('kitchen.waste-entry.store');
-    });
-
-    // Student Reports Routes
-    Route::middleware(['auth', 'student'])->group(function () {
-        Route::get('/student/reports', [StudentReportController::class, 'index'])->name('student.reports');
-        Route::put('/student/reports/{report}', [StudentReportController::class, 'update'])->name('student.reports.update');
-        Route::delete('/student/reports/{report}', [StudentReportController::class, 'destroy'])->name('student.reports.destroy');
     });
 });
