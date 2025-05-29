@@ -1,0 +1,81 @@
+
+    .table th {
+        font-weight: 600;
+    }
+    .table td {
+        font-size: 0.9rem;
+        padding: 1rem 0.75rem;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.05);
+    }
+    .table thead i {
+        font-size: 1.4rem;
+        opacity: 0.8;
+    }
+    .meal-item {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    .meal-item:hover {
+        transform: translateY(-2px);
+    }
+    .meal-item .recipe-btn {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .meal-item:hover .recipe-btn {
+        opacity: 1;
+    }
+    .card-header h5 {
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+    .recipe-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        border-radius: 8px;
+    }
+    
+    .recipe-icon i {
+        font-size: 1.2rem;
+    }
+    
+    .recipe-section ul li, 
+    .recipe-section ol li {
+        margin-bottom: 0.5rem;
+        color: #6c757d;
+    }
+    
+    .recipe-section ul li:last-child, 
+    .recipe-section ol li:last-child {
+        margin-bottom: 0;
+    }
+    
+    #ingredientsList li {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    #ingredientsList li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--bs-primary);
+    }
+    
+    #instructionsList li {
+        padding-left: 0.5rem;
+    }
+    
+    .modal-header {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    
+    .modal-content {
+        border-radius: 0.5rem;
+    }

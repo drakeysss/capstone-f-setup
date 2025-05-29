@@ -8,23 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     use HasFactory;
-
+    
+    protected $table = 'reports';
     protected $fillable = [
         'student_id',
-        'meal_type',
         'report_date',
-        'meal_items',
-        'feedback',
-        'rating'
+        'meal_type',
+        'rating',
+        'feedback'
     ];
 
     protected $casts = [
-        'report_date' => 'datetime',
-        'meal_items' => 'array'
+        'report_date' => 'date',
+        'rating' => 'integer'
     ];
 
-    public function student()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class);
     }
-} 
+}

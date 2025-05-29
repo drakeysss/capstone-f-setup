@@ -128,4 +128,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CookDashboard::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'student_id');
+    }
 }

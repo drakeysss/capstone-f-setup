@@ -1,7 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
+
+
 <div class="login-wrapper">
+
+<div class="kitchenTeam">
+    <div class="kitchen-container">
+        <h1>List of Kitchen Team for:</h1>
+        <h2>Member 1</h2>
+        <p>Here you can view the members of the kitchen team.</p>
+    </div>
+</div>
+
     <div class="login-container">
         <div class="login-content">
             <div class="card p-4">
@@ -89,7 +103,8 @@
     .login-wrapper {
         position: fixed;
         top: 0; left: 0;
-        width: 100%; height: 100%;
+        width: 100%;
+         height: 100%;
         overflow: hidden;
     }
     .login-container {
@@ -106,6 +121,22 @@
         justify-content: center;
         padding: 0;
     }
+
+    .kitchenTeam {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; 
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5); 
+        color: white; 
+        padding: 20px; 
+    }
+
+    .kitchen-container {
+        margin-top: 200px;
+    }
+
     .login-content {
         width: 100%;
         max-width: 396px;

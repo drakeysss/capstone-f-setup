@@ -1,14 +1,24 @@
 @extends('layouts.app')
 
+
+
+
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
-        <button>
-            <a href="{{ route('kitchen.reports_form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-download fa-sm text-white-50"></i>Submit Report
+        <h1
+        <div>
+
+        
+            <button class="btn btn-sm btn-primary shadow-sm">
+            <a href="{{ route('kitchen.reportsForm') }}" class="text-white text-decoration-none">
+                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
             </a>
-        </button>
+            </button>
+
+            
+
+        </div>
     </div>
 
     <div class="row">
@@ -84,11 +94,86 @@
                                 </tr>
                                 @endforeach
                             </tbody>
+                                <tr>
+                                    <td>Meat</td>
+                                    <td>20</td>
+                                    <td>₱45,000</td>
+                                    <td>
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-info" style="width: 65%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Vegetables</td>
+                                    <td>25</td>
+                                    <td>₱15,000</td>
+                                    <td>
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-warning" style="width: 85%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Student Feedback</h1>
+    </div>
+
+    <div class="row">
+        <!-- Feedback Table -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Submitted Feedbacks</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Feedback</th>
+                                    <th>Rating</th>
+                                    <th>Date Submitted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($feedbacks as $feedback)
+                                <tr>
+                                    <td>{{ $feedback->student_name }}</td>
+                                    <td>{{ $feedback->feedback }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span>{{ $feedback->rating }}</span>
+                                            <div class="ml-2">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="fas fa-star {{ $i <= $feedback->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $feedback->created_at->format('F d, Y') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if($feedbacks->isEmpty())
+                        <p class="text-center text-muted">No feedbacks submitted yet.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
 </div>
 
@@ -238,5 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnMonth) btnMonth.addEventListener('click', () => updateChart('month'));
 });
 </script>
+<script src="{{ asset('js/kitchen/reports.js') }}"></script>
+
 @endpush
 @endsection

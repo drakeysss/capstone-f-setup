@@ -124,7 +124,7 @@
         <div class="sidebar-category">INVENTORY</div>
         <ul class="sidebar-nav">
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('kitchen.inventory') ? 'active' : '' }}" href="{{ route('kitchen.inventory') }}">
+                <a class="nav-link {{ request()->routeIs('kitchen.inventory.dashboard') ? 'active' : '' }}" href="{{ route('kitchen.inventory.dashboard') }}">
                     <i class="bi bi-box-seam icon"></i>
                     <span class="small">Inventory</span>
                 </a>

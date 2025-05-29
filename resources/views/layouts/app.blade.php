@@ -410,6 +410,17 @@
             @endif
 
             <!-- Main Content -->
+            <main class="main-content" style="margin-left:250px; padding-top:60px; min-height:calc(100vh - 70px); margin-top:20px; background:#f8f9fc;">
+                @if(session('error'))
+                    <div class="alert alert-danger mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
             @if(session('error'))
                 <div class="alert alert-danger mb-4">
                     {{ session('error') }}
@@ -477,6 +488,7 @@
         });
     </script>
 
+    <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

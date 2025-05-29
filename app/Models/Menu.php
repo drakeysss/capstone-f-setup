@@ -11,24 +11,22 @@ class Menu extends Model
     use HasFactory;
 
     protected $fillable = [
-        'meal_type',
-        'menu_item',
+        'name',
         'description',
-        'calories',
-        'protein',
-        'carbs',
-        'fats',
+        'category',
+        'meal_type',
         'date',
+        'price',
+        'image',
+        'is_available',
         'created_by',
         'updated_by'
     ];
 
     protected $casts = [
-        'calories' => 'integer',
-        'protein' => 'decimal:2',
-        'carbs' => 'decimal:2',
-        'fats' => 'decimal:2',
         'date' => 'date',
+        'price' => 'decimal:2',
+        'is_available' => 'boolean'
     ];
 
     public function creator(): BelongsTo

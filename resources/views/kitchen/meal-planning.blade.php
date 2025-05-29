@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+
+<script>
+    const recipes   = JSON.parse(@json($recipesJson));
+    const weekMenus = JSON.parse(@json($weekMenusJson));
+    console.log('weekMenus:', weekMenus);
+</script>
+
+<link rel="stylesheet" href="{{ asset('css/kitchen/meal-planning.css') }}">
+<link rel="stylesheet" href="{{ asset('css/kitchen/ingredientsPopup.css') }}">
+
 <div class="container-fluid">
     <!-- Header -->
     <div class="mb-4">
@@ -8,6 +18,8 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="fw-bold mb-1">Daily/Weekly Meal</h2>
+                    <h2 class="fw-bold mb-1">Weekly Meal Schedule</h2>
+                    <p class="mb-0 small">Plan and manage meals for all weeks</p>
                 </div>
                 <div>
                     <i class="bi bi-calendar-week display-4 opacity-25"></i>
@@ -30,6 +42,10 @@
 
     <!-- Meal Schedule Table -->
     <div class="card shadow-sm">
+    </div>
+    </div>
+
+    <!-- Meal Schedule Table -->
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -68,7 +84,6 @@
 
 <script>
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const weekMenus = @json($recipes);
     
     function showWeek(week) {
         const tbody = document.getElementById('week-rows');
@@ -102,8 +117,6 @@
                     <span class="small text-muted">${meals.Dinner && meals.Dinner.name ? meals.Dinner.name : '-'}</span>
                     ${meals.Dinner && meals.Dinner.status ? `<br><span class="badge ${meals.Dinner.status === 'available' ? 'bg-success' : (meals.Dinner.status === 'low stock' ? 'bg-warning' : 'bg-secondary')}">${meals.Dinner.status}</span>` : ''}
                 </td> 
-
-
             `;
             tbody.appendChild(row);
         });
@@ -130,4 +143,13 @@
         opacity: 0.8;
     }
 </style>
+
+
+
+
+
+    
+<script src="{{ asset('js/kitchen/meal-planning.js') }}"></script>
+<script src="{{ asset('js/kitchen/ingredientsPopup.js') }}"></script>
 @endsection
+

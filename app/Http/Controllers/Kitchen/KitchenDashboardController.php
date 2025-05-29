@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Recipe;
 use App\Models\ReportReason;
 use App\Models\WasteEntry;
+use App\Models\Ingredient;
 
 class KitchenDashboardController extends BaseDashboardController
 {
@@ -70,11 +71,6 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Recipe & Meal
-    public function recipes()
-    {
-        return view('kitchen.recipes');
-    }
-
     public function mealPlanning()
     {
         try {
@@ -96,16 +92,27 @@ class KitchenDashboardController extends BaseDashboardController
                     $groupedRecipes[$week][$day] = [];
                 }
                 
-                $groupedRecipes[$week][$day][$type] =[
-                     'name' => $name,
+                $groupedRecipes[$week][$day][$type] = [
+                    'name' => $name,
                     'status' => $status,
                 ];
             }
             
-            return view('kitchen.meal-planning', ['recipes' => $groupedRecipes]);
+            $recipesJson = json_encode($recipes);
+            $weekMenusJson = json_encode($groupedRecipes);
+            
+            return view('kitchen.meal-planning', [
+                'recipesJson' => $recipesJson,
+                'weekMenusJson' => $weekMenusJson,
+                'recipes' => $groupedRecipes
+            ]);
         } catch (\Exception $e) {
             \Log::error('Error in mealPlanning: ' . $e->getMessage());
-            return view('kitchen.meal-planning', ['recipes' => []]);
+            return view('kitchen.meal-planning', [
+                'recipesJson' => json_encode([]),
+                'weekMenusJson' => json_encode([]),
+                'recipes' => []
+            ]);
         }
     }
 
@@ -120,17 +127,67 @@ class KitchenDashboardController extends BaseDashboardController
     }
 
     // Inventory Management
-    public function inventory()
+
+
+    public function inventoryDashboard()
     {
-        return view('kitchen.inventory');
+        return $this->generateInventory();
     }
-
-
+        
     public function generateInventory()
     {
-        
+        $ingredients = Ingredient::all()->map(function ($ingredient) {
+            if ($ingredient->ingredient_quantity < 10) {
+                $ingredient->data_status = 'low stock';
+            } elseif ($ingredient->ingredient_quantity == 0) {
+                $ingredient->data_status = 'out of stock';
+            } else {
+                $ingredient->data_status = 'in stock';
+            }
+            return $ingredient;
+        });
 
-        return view('kitchen.inventory.generate');
+        $lowStockCount = $ingredients->filter(function ($ingredient) {
+            return $ingredient->ingredient_quantity < 10;
+        })->count();
+
+        $totalIngredients = $ingredients->count();
+
+        return view('kitchen.inventory', compact('ingredients', 'lowStockCount', 'totalIngredients'));
+    }
+
+    public function viewIngredient($id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        return view('kitchen.viewIngredient', compact('ingredient'));
+    }
+
+    public function updateIngredient(Request $request, $id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->update($request->all());
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient updated successfully.');
+    }
+
+    public function storeIngredient(Request $request)
+    {
+        $request->validate([
+            'ingredient_name' => 'required|string|max:255',
+            'ingredient_category' => 'nullable|string|max:255',
+            'ingredient_unit' => 'nullable|string|max:50',
+            'ingredient_price' => 'nullable|numeric',
+            'ingredient_quantity' => 'nullable|integer',
+        ]);
+
+        Ingredient::create($request->all());
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient added successfully.');
+    }
+
+    public function deleteIngredient($id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->delete();
+        return redirect()->route('kitchen.inventory')->with('success', 'Ingredient deleted successfully.');
     }
 
 
@@ -146,6 +203,16 @@ class KitchenDashboardController extends BaseDashboardController
 
 
     //Kitchen Suppliers Management
+
+
+
+
+
+
+
+
+
+
     public function suppliers()
     {
         return view('kitchen.suppliers');
@@ -258,6 +325,28 @@ class KitchenDashboardController extends BaseDashboardController
         $data = $this->getAnalyticsData();
         return view('kitchen.analytics', $data);
     }
+
+    public function viewReport()
+    {
+        return view('kitchen.reportsForm');
+    }
+
+
+    public function storeReport(Request $request)
+    {
+        // Handle the report submission logic here
+        // For example, validate and save the report data
+        $request->validate([
+            'report_type' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'date' => 'required|date',
+            
+        ]);
+        // Redirect or return a response as needed
+        return redirect()->route('kitchen.reports')->with('success', 'Report submitted successfully.');
+    }
+
+
 
     // Alerts & Notifications
     public function notifications()

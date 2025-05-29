@@ -16,7 +16,7 @@ class StudentDashboardController extends BaseDashboardController
 
     protected function getDashboardData()
     {
-        $reports = Report::where('student_id', Auth::id())
+        $reports = Report::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
@@ -61,7 +61,7 @@ class StudentDashboardController extends BaseDashboardController
     {
         $reports = Report::where('student_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
             
         return view('student.reports', compact('reports'));
     }
@@ -78,7 +78,7 @@ class StudentDashboardController extends BaseDashboardController
         ]);
 
         $report = Report::create([
-            'student_id' => Auth::id(),
+            'user_id' => Auth::id(),
             'meal_type' => $request->meal_type,
             'report_date' => $request->report_date,
             'meal_items' => json_encode($request->meal_items),
@@ -90,5 +90,15 @@ class StudentDashboardController extends BaseDashboardController
             'success' => true,
             'report' => $report
         ]);
+    }
+
+    public function history()
+    {
+        $orders = Auth::user()->orders()
+            ->with(['items.menu'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('student.history', compact('orders'));
     }
 }
