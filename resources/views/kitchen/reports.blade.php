@@ -6,7 +6,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
+        <h1
         <div>
 
         
@@ -121,28 +121,59 @@
             </div>
         </div>
 
-        <!-- Popular Recipes -->
-        <div class="col-xl-6 col-lg-6">
+        <div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Student Feedback</h1>
+    </div>
+
+    <div class="row">
+        <!-- Feedback Table -->
+        <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Popular Recipes</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Submitted Feedbacks</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Recipe</th>
-                                    <th>Servings</th>
+                                    <th>Student Name</th>
+                                    <th>Feedback</th>
                                     <th>Rating</th>
-                                    <th>Trend</th>
+                                    <th>Date Submitted</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach($feedbacks as $feedback)
+                                <tr>
+                                    <td>{{ $feedback->student_name }}</td>
+                                    <td>{{ $feedback->feedback }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span>{{ $feedback->rating }}</span>
+                                            <div class="ml-2">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <i class="fas fa-star {{ $i <= $feedback->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $feedback->created_at->format('F d, Y') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
+                    @if($feedbacks->isEmpty())
+                        <p class="text-center text-muted">No feedbacks submitted yet.</p>
+                    @endif
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
     </div>
 </div>
 
