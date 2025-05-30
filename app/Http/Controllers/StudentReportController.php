@@ -10,7 +10,7 @@ class StudentReportController extends Controller
 {
     public function index()
     {
-        $reports = Report::where('user_id', Auth::id())
+        $reports = Report::where('student_id', Auth::id())
                         ->orderBy('report_date', 'desc')
                         ->paginate(10);
 
