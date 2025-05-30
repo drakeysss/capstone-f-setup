@@ -21,4 +21,19 @@ class Ingredient extends Model
         'ingredient_price',
         'ingredient_quantity',
     ];
+
+    public function getStockStatus(){
+            $lowStockThreshold = [
+                'kg'        => 0.5,
+                'pcs'       => 10,
+                'pack/s'    => 1,
+                'tray/s'    => 1,
+                'can/s'     => 1,
+                'bottle/s'  => 1,
+                'box/es'    => 1,
+                'gallon/s'  => 1,
+                'container/s'=> 1,
+                'dozen/s'   => 1,
+            ];
+    }
 }
