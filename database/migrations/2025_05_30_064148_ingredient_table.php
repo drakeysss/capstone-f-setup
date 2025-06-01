@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id('ingredient_id');
             $table->string('ingredient_name');
-            $table->enum('ingredient_category', ['Meat', 'Vegetables', 'Fruits', 'Dairy', 'Grains', 'Condiments'])->nullable();
-            $table->enum('ingredient_unit', ['kg', 'g', 'pcs', 'liters', 'ml'])->nullable();
+            $table->enum('ingredient_category', ['Meat', 'Vegetables and Legumes', 'Dry Goods', 'Fruits', 'Dairy', 'Fish', 'Seasonings and Condiments','Pantry Staples'])->nullable();
+            $table->enum('ingredient_unit', ['pcs','kg','can/s','pack/s', 'tray/s', 'container/s', 'gallon/s', 'box/es', 'bottle/s', 'dozen/s'])->nullable();
             $table->decimal('ingredient_price', 8, 2)->nullable();
             $table->unsignedInteger('ingredient_quantity')->nullable();
             $table->timestamps();

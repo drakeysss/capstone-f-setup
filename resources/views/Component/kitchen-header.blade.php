@@ -32,8 +32,8 @@
                         <div class="menu-divider"></div>
         
                         <a href="{{ route('kitchen.settings') }}" class="menu-item">
-                            <i class="bi bi-gear"></i>
-                            <span>Settings</span>
+                            <i class="bi bi-book"></i>
+                            <span>Guidelines and Policies</span>
                         </a>
                         <div class="menu-divider"></div>
                         <form method="POST" action="{{ route('logout') }}" class="menu-item">

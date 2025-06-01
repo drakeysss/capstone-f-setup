@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('meal_type');
             $table->string('menu_item');
             $table->boolean('is_editable')->default(true);
+            $table->text('ingredients')->nullable();
             $table->timestamps();
         });
     }

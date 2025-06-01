@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\BaseDashboardController;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class StudentDashboardController extends BaseDashboardController
 {
@@ -16,7 +17,7 @@ class StudentDashboardController extends BaseDashboardController
 
     protected function getDashboardData()
     {
-        $reports = Report::where('student_id', Auth::id())
+        $reports = Report::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
@@ -61,7 +62,7 @@ class StudentDashboardController extends BaseDashboardController
     {
         $reports = Report::where('student_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
             
         return view('student.reports', compact('reports'));
     }
@@ -78,7 +79,7 @@ class StudentDashboardController extends BaseDashboardController
         ]);
 
         $report = Report::create([
-            'student_id' => Auth::id(),
+            'user_id' => Auth::id(),
             'meal_type' => $request->meal_type,
             'report_date' => $request->report_date,
             'meal_items' => json_encode($request->meal_items),
@@ -94,11 +95,54 @@ class StudentDashboardController extends BaseDashboardController
 
     public function history()
     {
+        // Get all orders grouped by month and date
         $orders = Auth::user()->orders()
             ->with(['items.menu'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->groupBy(function($order) {
+                return Carbon::parse($order->created_at)->format('Y-m');
+            })
+            ->map(function($monthOrders) {
+                return $monthOrders->groupBy(function($order) {
+                    return Carbon::parse($order->created_at)->format('Y-m-d');
+                });
+            });
 
-        return view('student.history', compact('orders'));
+        // Get all reports grouped by month and date
+        $reports = Report::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function($report) {
+                return Carbon::parse($report->created_at)->format('Y-m');
+            })
+            ->map(function($monthReports) {
+                return $monthReports->groupBy(function($report) {
+                    return Carbon::parse($report->created_at)->format('Y-m-d');
+                });
+            });
+
+        // For testing purposes, create some dummy data if no orders exist
+        if ($orders->isEmpty()) {
+            $orders = collect([
+                '2024-03' => collect([
+                    '2024-03-25' => collect([
+                        (object)[
+                            'items' => collect([
+                                (object)[
+                                    'menu' => (object)[
+                                        'meal_type' => 'breakfast',
+                                        'name' => 'Tapsilog',
+                                        'description' => 'Tapa, Sinangag, at Itlog'
+                                    ]
+                                ]
+                            ])
+                        ]
+                    ])
+                ])
+            ]);
+        }
+
+        return view('student.history', compact('orders', 'reports'));
     }
 }
